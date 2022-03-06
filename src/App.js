@@ -1,12 +1,10 @@
 import React from "react";
+import HomePage from "./container/HomePage/HomePage";
 
 const App = () => {
   return (
     <>
-      <div>
-        <div>hello world</div>
-        <i class="fa-brands fa-facebook"></i>
-      </div>
+      <HomePage />
     </>
   );
 };
