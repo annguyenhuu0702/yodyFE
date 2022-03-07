@@ -1,0 +1,33 @@
+@import "../../../styles/variable";
+
+.sec-services {
+  margin: 20px 0;
+  padding-left: 0;
+  .container {
+    padding-left: 0;
+    .services-list {
+      display: flex;
+      justify-content: space-between;
+      .services-content {
+        display: flex;
+        align-items: center;
+        .content-right {
+          margin-left: 10px;
+          span {
+            font-size: 1.4rem;
+            font-weight: 500;
+          }
+          p {
+            font-size: 1.4rem;
+            margin-bottom: 0;
+            padding: 4px 0;
+            font-weight: 500;
+            b {
+              color: $yellow;
+            }
+          }
+        }
+      }
+    }
+  }
+}
