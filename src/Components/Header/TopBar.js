@@ -4,7 +4,7 @@ import "./_topbar.scss";
 
 const TopBar = () => {
   return (
-    <div className="topbar">
+    <section className="topbar">
       <div className="banner">
         <a href=" ">
           <img
@@ -29,7 +29,7 @@ const TopBar = () => {
           <a href=" ">chamsockhachhang@yody.vn</a>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

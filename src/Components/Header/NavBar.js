@@ -3,7 +3,7 @@ import "./_navbar.scss";
 
 const NavBar = () => {
   return (
-    <div className="header-nav-main container">
+    <section className="header-nav-main container">
       <a href=" " className="logo">
         <img
           src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/logo.svg?1646486842767"
@@ -87,7 +87,7 @@ const NavBar = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
