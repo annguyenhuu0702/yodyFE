@@ -44,6 +44,49 @@ const NavBar = () => {
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
+      <div className="nav-main-right">
+        <div className="auth">
+          <a href=" ">
+            <img
+              src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/user.svg?1646575637708"
+              alt=""
+            />
+          </a>
+          <ul className="header-account">
+            <li>
+              <a href=" " className="register">
+                Đăng kí
+              </a>
+            </li>
+            <li>
+              <a href=" " className="login">
+                Đăng nhập
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div className="cart">
+          <a href=" ">
+            <img
+              src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/cart.svg?1646575637708"
+              alt=""
+            />
+          </a>
+          <div className="cart-content">
+            <div className="cart-item">
+              <img
+                src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/blank_cart.svg?1646575637708"
+                alt=""
+                className="cart-img"
+              />
+              <p className="cart-message">Giỏ hàng của bạn đang trống</p>
+              <a href=" " className="login-cart">
+                Đăng nhập/Đăng kí
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

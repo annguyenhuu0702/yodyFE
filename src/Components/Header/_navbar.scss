@@ -1,9 +1,10 @@
 @import "../../styles/variable";
 
 .header-nav-main {
+  display: flex;
   margin-top: 16px;
   padding-left: 0 !important;
-  display: flex;
+  position: relative;
   .logo {
     display: flex;
     align-items: center;
@@ -63,6 +64,105 @@
         font-size: 2rem;
         color: $white;
         font-weight: 700;
+      }
+    }
+  }
+
+  .nav-main-right {
+    display: flex;
+    align-items: center;
+    margin-left: 36px;
+    .auth {
+      position: relative;
+      margin-right: 30px;
+      font-size: 20px;
+      &:hover .header-account {
+        display: block;
+      }
+      &::after {
+        display: block;
+        content: "";
+        position: absolute;
+        top: calc(100% - 2px);
+        left: 0;
+        z-index: 10;
+        background-color: #fff;
+        width: 26px;
+        height: 16px;
+      }
+
+      .header-account {
+        display: none;
+        position: absolute;
+        min-width: 170px;
+        top: calc(100% + 12px);
+        right: 0;
+        padding: 6px 8px;
+        font-size: 1.4rem;
+        background: $white;
+        margin-bottom: 0;
+        box-shadow: 0px 3px 25px 0px rgb(31 38 67 / 10%);
+        li {
+          list-style: none;
+          padding: 0 10px;
+          a {
+            display: block;
+            color: $black;
+            padding: 5px;
+            width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &:hover {
+              text-decoration: none;
+              color: $yellow;
+            }
+          }
+        }
+      }
+    }
+    .cart {
+      position: relative;
+      &:hover .cart-content {
+        display: block;
+        transition: 5s;
+      }
+
+      .cart-content {
+        display: none;
+        right: 0;
+        top: calc(100% + 10px);
+        position: absolute;
+        background: #fff;
+        box-shadow: 0px 3px 25px 0px rgb(31 38 67 / 10%);
+        z-index: 10000;
+        &::after {
+          display: block;
+          content: "";
+          position: absolute;
+          top: -12px;
+          right: 0;
+          background: transparent;
+          width: 28px;
+          height: 16px;
+        }
+        .cart-item {
+          width: 430px;
+          padding: 20px 10px;
+          text-align: center;
+          p {
+            font-size: 1.6rem;
+            color: $black;
+          }
+          a {
+            color: $black;
+            font-size: 1.6rem;
+            &:hover {
+              text-decoration: none;
+              color: $yellow;
+            }
+          }
+        }
       }
     }
   }
