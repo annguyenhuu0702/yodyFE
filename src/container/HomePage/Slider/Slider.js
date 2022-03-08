@@ -19,7 +19,7 @@ const Slider = () => {
       <Swiper
         modules={[Pagination, Autoplay]}
         slidesPerView={1}
-        autoplay={{ delay: 5000 }}
+        autoplay={{ delay: 4000 }}
         pagination={{ clickable: true }}
       >
         {srcImg &&
