@@ -4,7 +4,9 @@ import Header from "../../Components/Header/Header";
 import Banner from "./Banner/Banner";
 import Services from "./Services/Services";
 import Slide from "./Slider/Slider";
-// import Products from "../../Components/Products/Products";
+import Products from "../../Components/Products/Products";
+import HomeProducts from "./HomeProduct/HomeProducts";
+import Footer from "../../Components/Footer/Footer";
 
 const HomePage = () => {
   return (
@@ -13,7 +15,8 @@ const HomePage = () => {
       <Slide />
       <Services />
       <Banner />
-      {/* <Products /> */}
+      <HomeProducts />
+      <Footer />
     </div>
   );
 };
