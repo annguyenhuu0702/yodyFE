@@ -1,15 +1,16 @@
 import React from "react";
 import "./_navbar.scss";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
     <section className="header-nav-main container">
-      <a href=" " className="logo">
+      <Link to="/" className="logo">
         <img
           src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/logo.svg?1646486842767"
           alt=""
         />
-      </a>
+      </Link>
       <div className="header-nav">
         <ul className="header-menu">
           <li>
@@ -54,14 +55,14 @@ const NavBar = () => {
           </a>
           <ul className="header-account">
             <li>
-              <a href=" " className="register">
+              <Link to="/account/register" className="register">
                 Đăng kí
-              </a>
+              </Link>
             </li>
             <li>
-              <a href=" " className="login">
+              <Link to="/account/login" className="login">
                 Đăng nhập
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
