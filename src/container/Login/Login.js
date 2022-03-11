@@ -1,40 +1,42 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./_login.scss";
+import Input from "../../Components/InputField/Input";
+import "./_account.scss";
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const [email, setEmail] = useState();
   const [passWord, setPassWord] = useState();
 
+  let plahoder = {
+    email: "Email",
+    password: "Mật khẩu",
+  };
+
   return (
-    <div className="page-login">
+    <div className="page-content-account">
       <div className="container">
-        <div className="login-content">
-          <div className="group-login">
+        <div className="d-group">
+          <div className="group-account">
             <h2>ĐĂNG NHẬP</h2>
-            <form className="login-form">
+            <form className="account-form">
               <div className="form-group">
-                <input
-                  className="form-control"
-                  value={email}
-                  type="text"
-                  placeholder="Email"
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
+                <Input
+                  classStyle="form-control"
+                  inputType="text"
+                  data={email}
+                  setData={setEmail}
+                  placeholder={plahoder.email}
                 />
               </div>
               <div className="form-group">
-                <input
-                  className="form-control"
-                  type={showPass ? "text" : "password"}
-                  value={passWord}
-                  placeholder="Mật khẩu"
-                  onChange={(e) => {
-                    setPassWord(e.target.value);
-                  }}
+                <Input
+                  classStyle="form-control"
+                  inputType="password"
+                  data={passWord}
+                  setData={setPassWord}
+                  placeholder={plahoder.password}
+                  showPass={showPass}
                 />
-
                 <span
                   className="show-pass"
                   onClick={() => setShowPass(!showPass)}
@@ -42,11 +44,9 @@ const Login = () => {
                   <i className="fa-solid fa-eye"></i>
                 </span>
               </div>
-              <div className="btn-login">
-                <button className="login" type="">
-                  Đăng nhập
-                </button>
-              </div>
+              <button className="btn-login" type="">
+                Đăng nhập
+              </button>
             </form>
             <div className="forgot">
               <a href=" " className="forgot-text left">
@@ -60,22 +60,20 @@ const Login = () => {
               <p className="social-text">
                 <span>--- Hoặc ---</span>
               </p>
-              <div className="login-with">
-                <a href=" " className="with-facebook">
-                  <img
-                    className="w-25"
-                    src="https://bizweb.dktcdn.net/assets/admin/images/login/fb-btn.svg"
-                    alt=""
-                  />
-                </a>
-                <a href=" " className="with-google">
-                  <img
-                    className="w-25"
-                    src="https://bizweb.dktcdn.net/assets/admin/images/login/gp-btn.svg"
-                    alt=""
-                  />
-                </a>
-              </div>
+              <a href=" " className="with-facebook">
+                <img
+                  className="w-25"
+                  src="https://bizweb.dktcdn.net/assets/admin/images/login/fb-btn.svg"
+                  alt=""
+                />
+              </a>
+              <a href=" " className="with-google">
+                <img
+                  className="w-25"
+                  src="https://bizweb.dktcdn.net/assets/admin/images/login/gp-btn.svg"
+                  alt=""
+                />
+              </a>
             </div>
           </div>
         </div>

@@ -2,10 +2,9 @@ import React from "react";
 import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Header";
 import HomePage from "./container/HomePage/HomePage";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./container/Login/Login";
 import Register from "./container/Register/Register";
-import { Routes } from "react-router-dom";
 
 const App = () => {
   return (
