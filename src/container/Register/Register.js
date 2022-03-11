@@ -90,7 +90,11 @@ const Register = () => {
                   className="show-pass"
                   onClick={() => setShowPass(!showPass)}
                 >
-                  <i className="fa-solid fa-eye"></i>
+                  {showPass ? (
+                    <i className="fa-solid fa-eye"></i>
+                  ) : (
+                    <i className="fa-solid fa-eye-slash"></i>
+                  )}
                 </span>
               </div>
               <button className="btn-login register" type="">
