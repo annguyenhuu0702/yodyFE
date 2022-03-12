@@ -1,21 +1,20 @@
 import React, { useState } from "react";
-import "../Login/_account.scss";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import Input from "../../Components/InputField/Input";
+import "../Login/_account.scss";
 
 const Register = () => {
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [email, setEmail] = useState();
-  const [passWord, setPassWord] = useState();
   const [showPass, setShowPass] = useState(false);
-  const plahoder = {
-    firstName: "Tên",
-    lastName: "Họ",
-    phoneNumber: "Số điện thoại",
-    email: "Địa chỉ email",
-    password: "Mật khẩu",
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
   return (
@@ -32,17 +31,21 @@ const Register = () => {
               </Link>
               ĐĂNG KÝ THÀNH VIÊN MỚI
             </h2>
-            <form className="account-form">
+            <form className="account-form" onSubmit={handleSubmit(onSubmit)}>
               <div className="row">
                 <div className="col-lg-6 col-left">
                   <div className="form-group">
                     <Input
                       classStyle="form-control"
                       inputType="text"
-                      data={firstName}
-                      setData={setFirstName}
-                      placeholder={plahoder.firstName}
+                      name="firstName"
+                      placeholder="Tên"
+                      register={register}
+                      errors={{ required: true }}
                     />
+                    {errors.firstName?.type === "required" && (
+                      <p>Please fill in this field !</p>
+                    )}
                   </div>
                 </div>
                 <div className="col-lg-6">
@@ -50,10 +53,14 @@ const Register = () => {
                     <Input
                       classStyle="form-control"
                       inputType="text"
-                      data={lastName}
-                      setData={setLastName}
-                      placeholder={plahoder.lastName}
+                      name="lastName"
+                      placeholder="Họ"
+                      register={register}
+                      errors={{ required: true }}
                     />
+                    {errors.lastName?.type === "required" && (
+                      <p>Please fill in this field !</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -61,30 +68,59 @@ const Register = () => {
                 <Input
                   classStyle="form-control"
                   inputType="text"
-                  data={phoneNumber}
-                  setData={setPhoneNumber}
-                  placeholder={plahoder.phoneNumber}
+                  name="phoneNumber"
+                  placeholder="Số điện thoại"
+                  register={register}
+                  errors={{
+                    required: true,
+                    pattern: /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
+                  }}
                 />
+                {errors.phoneNumber?.type === "required" && (
+                  <p>Please fill in this field !</p>
+                )}
+                {errors.phoneNumber?.type === "pattern" && (
+                  <p>Your phone number is not valid !</p>
+                )}
               </div>
               <div className="form-group">
                 <Input
                   classStyle="form-control"
                   inputType="text"
-                  data={email}
-                  setData={setEmail}
-                  placeholder={plahoder.email}
+                  name="email"
+                  placeholder="Email"
+                  register={register}
+                  errors={{
+                    required: true,
+                    pattern:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  }}
                 />
+                {errors.email?.type === "required" && (
+                  <p>Please fill in this field !</p>
+                )}
+                {errors.email?.type === "pattern" && (
+                  <p>Please enter a valid email !</p>
+                )}
               </div>
               <div className="form-group">
                 <div className="form-group">
                   <Input
                     classStyle="form-control"
                     inputType="password"
-                    data={passWord}
-                    setData={setPassWord}
-                    placeholder={plahoder.password}
+                    name="password"
+                    autoComplete="on"
+                    placeholder="Mật khẩu"
                     showPass={showPass}
+                    register={register}
+                    errors={{ required: true, minLength: 6 }}
                   />
+                  {errors.password?.type === "required" && (
+                    <p>Please fill in this field !</p>
+                  )}
+                  {errors.password?.type === "minLength" && (
+                    <p>Password must be 6 characters long!</p>
+                  )}
                 </div>
                 <span
                   className="show-pass"

@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../Components/InputField/Input";
 import "./_account.scss";
+import { useForm } from "react-hook-form";
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
-  const [email, setEmail] = useState();
-  const [passWord, setPassWord] = useState();
 
-  let plahoder = {
-    email: "Email",
-    password: "Mật khẩu",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
   return (
@@ -18,25 +21,47 @@ const Login = () => {
         <div className="d-group">
           <div className="group-account">
             <h2>ĐĂNG NHẬP</h2>
-            <form className="account-form">
+            <form onSubmit={handleSubmit(onSubmit)} className="account-form">
               <div className="form-group">
                 <Input
                   classStyle="form-control"
                   inputType="text"
-                  data={email}
-                  setData={setEmail}
-                  placeholder={plahoder.email}
+                  name="email"
+                  placeholder="Email"
+                  register={register}
+                  errors={{
+                    required: true,
+                    pattern:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  }}
                 />
+                {errors.email?.type === "required" && (
+                  <p>Please fill in this field !</p>
+                )}
+                {errors.email?.type === "pattern" && (
+                  <p>Please enter a valid email !</p>
+                )}
               </div>
               <div className="form-group">
                 <Input
                   classStyle="form-control"
                   inputType="password"
-                  data={passWord}
-                  setData={setPassWord}
-                  placeholder={plahoder.password}
+                  name="password"
+                  placeholder="Mật khẩu"
                   showPass={showPass}
+                  autoComplete="on"
+                  register={register}
+                  errors={{
+                    required: true,
+                    minLength: 6,
+                  }}
                 />
+                {errors.password?.type === "required" && (
+                  <p>Please fill in this field !</p>
+                )}
+                {errors.password?.type === "minLength" && (
+                  <p>Password must be 6 characters long !</p>
+                )}
                 <span
                   className="show-pass"
                   onClick={() => setShowPass(!showPass)}
