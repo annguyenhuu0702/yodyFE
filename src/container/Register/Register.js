@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Input from "../../Components/InputField/Input";
 import "../Login/_account.scss";
 
 const Register = () => {
   const [showPass, setShowPass] = useState(false);
+
+  let params = useParams();
+  console.log(params);
 
   const {
     register,

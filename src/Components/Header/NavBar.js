@@ -1,8 +1,17 @@
 import React from "react";
 import "./_navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const NavBar = () => {
+  const category = [
+    { name: "NỮ", id: Date.now() + Math.random(), link: "nu" },
+    { name: "NAM", id: Date.now() + Math.random(), link: "nam" },
+    { name: "TRẺ EM", id: Date.now() + Math.random(), link: "tre-em" },
+    { name: "POLY YODY", id: Date.now() + Math.random(), link: "polo-yody" },
+    { name: "BỘ SƯU TẬP", id: Date.now() + Math.random(), link: "bo-suu-tap" },
+    { name: "YODY LOVE", id: Date.now() + Math.random(), link: "yody-love" },
+    { name: "ĐỒNG PHỤC", id: Date.now() + Math.random(), link: "dong-phuc" },
+  ];
   return (
     <section className="header-nav-main container">
       <Link to="/" className="logo">
@@ -13,27 +22,20 @@ const NavBar = () => {
       </Link>
       <div className="header-nav">
         <ul className="header-menu">
-          <li>
-            <a href=" ">NỮ</a>
-          </li>
-          <li>
-            <a href=" ">NAM</a>
-          </li>
-          <li>
-            <a href=" ">TRẺ EM</a>
-          </li>
-          <li>
-            <a href=" ">POLO YODY</a>
-          </li>
-          <li>
-            <a href=" ">BỘ SƯU TẬP</a>
-          </li>
-          <li>
-            <a href=" ">YODY LOVE</a>
-          </li>
-          <li>
-            <a href=" ">ĐỒNG PHỤC</a>
-          </li>
+          {category.map((item) => {
+            return (
+              <li key={item.id}>
+                <NavLink
+                  to={`/${item.link}`}
+                  className={({ isActive }) =>
+                    "category-link" + (isActive ? " activated" : "")
+                  }
+                >
+                  {item.name}
+                </NavLink>
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="header-search">
@@ -81,9 +83,9 @@ const NavBar = () => {
                 className="cart-img"
               />
               <p className="cart-message">Giỏ hàng của bạn đang trống</p>
-              <a href=" " className="login-cart">
+              <Link to="/account/login" className="login-cart">
                 Đăng nhập/Đăng kí
-              </a>
+              </Link>
             </div>
           </div>
         </div>

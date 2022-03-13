@@ -1,6 +1,6 @@
 import React from "react";
 import Banner from "./Banner/Banner";
-import Services from "./Services/Services";
+import Services from "../../Components/Services/Services";
 import Slide from "./Slider/Slider";
 import HomeProducts from "./HomeProduct/HomeProducts";
 
