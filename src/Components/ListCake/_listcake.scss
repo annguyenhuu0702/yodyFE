@@ -1,0 +1,20 @@
+.list-cake {
+  .swiper-wrapper {
+    flex-wrap: wrap;
+    .swiper-slide {
+      width: 200px !important;
+      margin: 0 20px 20px 0;
+      a {
+        border: 1px #dde1ef solid;
+        display: flex;
+        height: 120px;
+        padding-left: 80px;
+        font-size: 16px;
+        align-items: center;
+        color: #000;
+        position: relative;
+        overflow: hidden;
+      }
+    }
+  }
+}

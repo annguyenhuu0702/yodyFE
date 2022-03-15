@@ -3,6 +3,78 @@ import Products from "../../../Components/Products/Products";
 import "./_homeproduct.scss";
 
 const HomeProducts = () => {
+  const products = [
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/qjn3102-xah-phn4000-hog-1.jpg?v=1641958276000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/apm3299-dml-qjm5037-den-4.jpg?v=1646663806000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/qjn3102-xah-phn4000-hog-1.jpg?v=1641958276000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/qjn3102-xah-phn4000-hog-1.jpg?v=1641958276000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/qjn3102-xah-phn4000-hog-1.jpg?v=1641958276000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/qjn3102-xah-phn4000-hog-1.jpg?v=1641958276000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/apm3299-dml-qjm5037-den-4.jpg?v=1646663806000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/qjn3102-xah-phn4000-hog-1.jpg?v=1641958276000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/qjn3102-xah-phn4000-hog-1.jpg?v=1641958276000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+    {
+      id: Math.random(),
+      img: "https://bizweb.dktcdn.net/thumb/large/100/438/408/products/qjn3102-xah-phn4000-hog-1.jpg?v=1641958276000",
+      name: "Áo Phao Nữ Siêu Nhẹ Có Mũ Siêu Ấm",
+      priceCurrent: "499.000đ",
+      priceSale: "699.000đ",
+    },
+  ];
   return (
     <section className="home-product">
       <div className="container pl-0">
@@ -21,7 +93,7 @@ const HomeProducts = () => {
         </div>
       </div>
       <div className="product">
-        <Products />
+        <Products products={products} />
       </div>
     </section>
   );

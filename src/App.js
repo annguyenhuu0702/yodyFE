@@ -5,7 +5,7 @@ import HomePage from "./container/HomePage/HomePage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./container/Login/Login";
 import Register from "./container/Register/Register";
-import MenPage from "./container/MenPage/MenPage";
+import ProductPage from "./container/ProductPage/ProductPage";
 
 const App = () => {
   return (
@@ -15,7 +15,7 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/account/login" element={<Login />} />
         <Route path="/account/register" element={<Register />} />
-        <Route path="/nam" element={<MenPage />} />
+        <Route path="/:categorySlug" element={<ProductPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
