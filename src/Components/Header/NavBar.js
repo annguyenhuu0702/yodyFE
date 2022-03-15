@@ -1,6 +1,6 @@
 import React from "react";
 import "./_navbar.scss";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const category = [
@@ -24,15 +24,8 @@ const NavBar = () => {
         <ul className="header-menu">
           {category.map((item) => {
             return (
-              <li key={item.id}>
-                <NavLink
-                  to={`/${item.link}`}
-                  className={({ isActive }) =>
-                    "category-link" + (isActive ? " activated" : "")
-                  }
-                >
-                  {item.name}
-                </NavLink>
+              <li key={item.id} className="category">
+                <Link to={`/${item.link}`}>{item.name}</Link>
               </li>
             );
           })}
