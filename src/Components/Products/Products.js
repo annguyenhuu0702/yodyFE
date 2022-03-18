@@ -1,5 +1,6 @@
 import React from "react";
 import "./_product.scss";
+
 const Products = (props) => {
   const { products } = props;
   return (

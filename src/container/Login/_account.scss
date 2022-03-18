@@ -48,8 +48,18 @@
             font-size: 1.6rem;
             margin: 2px 0;
             text-align: left;
-            color: red;
+            color: $danger;
           }
+        }
+
+        .form-group-password {
+          margin: 0 0 10px 0;
+        }
+
+        p {
+          text-align: start;
+          color: $danger;
+          font-size: 1.6rem;
         }
 
         .btn-login {
@@ -66,12 +76,6 @@
           font-weight: bold;
           border-radius: 4px;
           border: none;
-        }
-
-        .row {
-          .col-left {
-            padding-right: 0;
-          }
         }
 
         .register {

@@ -1,6 +1,9 @@
 import React from "react";
 import "./_navbar.scss";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logOut } from "../../api/apiAuth";
 
 const NavBar = () => {
   const category = [
@@ -12,6 +15,15 @@ const NavBar = () => {
     { name: "YODY LOVE", id: Date.now() + Math.random(), link: "yody-love" },
     { name: "ĐỒNG PHỤC", id: Date.now() + Math.random(), link: "dong-phuc" },
   ];
+
+  const user = useSelector((state) => state.auth.login?.currentUser);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logOut(dispatch, navigate);
+  };
   return (
     <section className="header-nav-main container">
       <Link to="/" className="logo">
@@ -48,18 +60,33 @@ const NavBar = () => {
               alt=""
             />
           </a>
-          <ul className="header-account">
-            <li>
-              <Link to="/account/register" className="register">
-                Đăng kí
-              </Link>
-            </li>
-            <li>
-              <Link to="/account/login" className="login">
-                Đăng nhập
-              </Link>
-            </li>
-          </ul>
+          {user ? (
+            <ul className="header-account">
+              <li>
+                <p>Hi, {`${user.lastName}`}</p>
+                <Link
+                  to="/account/login"
+                  className="logout"
+                  onClick={handleLogout}
+                >
+                  Đăng xuất
+                </Link>
+              </li>
+            </ul>
+          ) : (
+            <ul className="header-account">
+              <li>
+                <Link to="/account/register" className="register">
+                  Đăng kí
+                </Link>
+              </li>
+              <li>
+                <Link to="/account/login" className="login">
+                  Đăng nhập
+                </Link>
+              </li>
+            </ul>
+          )}
         </div>
         <div className="cart">
           <a href=" ">
