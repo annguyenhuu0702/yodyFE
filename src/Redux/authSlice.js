@@ -4,7 +4,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     login: {
-      currentUser: JSON.parse(localStorage.getItem("mickey: user")),
+      currentUser: JSON.parse(localStorage.getItem("mickey:user")),
       isFetching: false,
       error: false,
       message: "",
@@ -14,10 +14,6 @@ const authSlice = createSlice({
       success: false,
       error: false,
       message: "",
-    },
-    logout: {
-      isFetching: false,
-      error: false,
     },
   },
   reducers: {
@@ -52,11 +48,11 @@ const authSlice = createSlice({
       state.register.message = action.payload;
     },
     logoutStart: (state) => {
-      state.logout.isFetching = true;
+      state.login.isFetching = true;
     },
     logoutSuccess: (state) => {
-      state.logout.isFetching = false;
-      state.logout.error = false;
+      state.login.isFetching = false;
+      state.login.error = false;
       state.login.currentUser = null;
       localStorage.setItem(
         "mickey:user",
@@ -64,8 +60,8 @@ const authSlice = createSlice({
       );
     },
     logoutFailed: (state) => {
-      state.logout.isFetching = false;
-      state.logout.error = true;
+      state.login.isFetching = false;
+      state.login.error = true;
     },
   },
 });

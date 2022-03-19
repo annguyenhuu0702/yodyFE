@@ -1,4 +1,5 @@
 @import "../../styles/variable";
+@import "../../styles/base";
 
 .header-nav-main {
   display: flex;
@@ -92,8 +93,18 @@
       position: relative;
       margin-right: 30px;
       font-size: 20px;
+
       &:hover .header-account {
         display: block;
+        @include animation(minhhieungu, 0.3s, ease-in, 1);
+        @include keyframes(minhhieungu) {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
       }
       &::after {
         display: block;
@@ -163,7 +174,15 @@
       position: relative;
       &:hover .cart-content {
         display: block;
-        transition: 5s;
+        @include animation(chubendanminhhieu, 0.3s, ease-in, 1);
+        @include keyframes(chubendanminhhieu) {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
       }
 
       .cart-content {

@@ -3,6 +3,7 @@ import "./_product.scss";
 
 const Products = (props) => {
   const { products } = props;
+  console.log(products);
   return (
     <div className="container pl-0">
       <div className="row">
@@ -11,7 +12,14 @@ const Products = (props) => {
             <div className="col-lg-3 product-item" key={item.id}>
               <div className="item-img">
                 <a href=" ">
-                  <img className="w-100" src={item.img} alt="" />
+                  <img
+                    className="w-100"
+                    src={
+                      "http://localhost:8080" +
+                      item.productColors[0].images[0].image
+                    }
+                    alt=""
+                  />
                 </a>
               </div>
               <div className="product-info">

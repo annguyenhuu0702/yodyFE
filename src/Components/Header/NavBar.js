@@ -36,7 +36,7 @@ const NavBar = () => {
         <ul className="header-menu">
           {category.map((item) => {
             return (
-              <li key={item.id} className="category">
+              <li className="category" key={item.id}>
                 <Link to={`/${item.link}`}>{item.name}</Link>
               </li>
             );
@@ -63,7 +63,7 @@ const NavBar = () => {
           {user ? (
             <ul className="header-account">
               <li>
-                <p>Hi, {`${user.lastName}`}</p>
+                <p>Hi, {`${user.firstName}`}</p>
                 <Link
                   to="/account/login"
                   className="logout"
