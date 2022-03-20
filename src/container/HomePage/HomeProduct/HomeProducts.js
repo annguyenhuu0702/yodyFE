@@ -1,10 +1,17 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { apiGetAllProduct } from "../../../api/apiProduct";
 import Products from "../../../Components/Products/Products";
 import "./_homeproduct.scss";
 
 const HomeProducts = () => {
+  const dispatch = useDispatch();
+
   const products = useSelector((state) => state.product.products);
+
+  useEffect(() => {
+    apiGetAllProduct(dispatch);
+  }, [dispatch]);
 
   return (
     <section className="home-product">
@@ -13,7 +20,7 @@ const HomeProducts = () => {
           <h2>ĐỀ XUẤT CHO BẠN</h2>
           <div className="title-destop">
             <ul className="title-list">
-              <li className="item item-active">Bán chạy nhất </li>
+              <li className="item item-active">Tất cả </li>
               <li className="item">Thời trang nam</li>
               <li className="item">Thời trang nữ</li>
               <li className="item">Thời trang trẻ em</li>

@@ -3,19 +3,35 @@ import "./productpage.scss";
 import Services from "../../Components/Services/Services";
 import Products from "../../Components/Products/Products";
 import ListCake from "../../Components/ListCake/ListCake";
-import { apiGetAllProduct } from "../../api/apiProduct";
+import { apiGetAllProductByCategorySlug } from "../../api/apiProduct";
 import { useDispatch, useSelector } from "react-redux";
+import { apiGetAllBuyerType } from "../../api/apiBuyerType";
+import { useParams } from "react-router-dom";
+import { sortProductByName } from "../../Redux/productSlide";
 
 const ProductPage = () => {
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.product.products);
+  const buyertypes = useSelector((state) => state.buyertype.buyertypes);
+
+  const params = useParams();
 
   useEffect(() => {
-    apiGetAllProduct(dispatch);
+    apiGetAllBuyerType(dispatch);
   }, [dispatch]);
 
-  return (
+  useEffect(() => {
+    const api = async () => {
+      await apiGetAllProductByCategorySlug(dispatch, params.productPage);
+      dispatch(sortProductByName());
+    };
+    api();
+  }, [dispatch, params.productPage]);
+
+  return !buyertypes.find((item) => item.slug === params.productPage) ? (
+    ""
+  ) : (
     <div className="men-page">
       <div className="banner-container">
         <img

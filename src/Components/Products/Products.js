@@ -3,7 +3,6 @@ import "./_product.scss";
 
 const Products = (props) => {
   const { products } = props;
-  console.log(products);
   return (
     <div className="container pl-0">
       <div className="row">
@@ -16,7 +15,7 @@ const Products = (props) => {
                     className="w-100"
                     src={
                       "http://localhost:8080" +
-                      item.productColors[0].images[0].image
+                      item.productColors[0].images[0]?.image
                     }
                     alt=""
                   />
@@ -27,8 +26,12 @@ const Products = (props) => {
                   <a href=" ">{item.name}</a>
                 </div>
                 <div className="price">
-                  <span className="current">{item.priceCurrent}</span>
-                  <span className="sale">{item.priceSale}</span>
+                  <span className="current">{item.newPrice}</span>
+                  {item.oldPrice === 0 ? (
+                    ""
+                  ) : (
+                    <span className="sale">{item.oldPrice}</span>
+                  )}
                 </div>
               </div>
             </div>
