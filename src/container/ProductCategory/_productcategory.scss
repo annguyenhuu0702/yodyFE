@@ -1,0 +1,110 @@
+@import "../../styles//variable";
+
+.product-category {
+  margin: 40px 0;
+
+  .col-lg-3 {
+    padding-left: 0;
+    .filter {
+      .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 40px;
+
+        i {
+          font-size: 1.6rem;
+        }
+      }
+      .list-item {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        padding-left: 0;
+        .filter-item {
+          border: 1px solid red;
+          display: flex;
+          align-items: center;
+          padding: 10px 16px;
+          margin: 6px 6px 6px 0;
+          cursor: pointer;
+
+          span {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            i {
+              display: block;
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              background-color: red;
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+    }
+
+    .filter-price {
+      .price {
+        .filter-item {
+          border: none;
+          margin: 6px 0 6px 0;
+          padding: 0;
+
+          span {
+            font-size: 1.6rem;
+            margin-left: 6px;
+          }
+        }
+      }
+    }
+
+    .filter-color,
+    .filter-size,
+    .filter-size {
+      margin-bottom: 20px;
+    }
+  }
+
+  .col-lg-9 {
+    .section-sort {
+      display: flex;
+      justify-content: space-between;
+
+      .count {
+        margin-left: -5px;
+        color: $black;
+        font-size: 1.6rem;
+      }
+
+      .sort {
+        padding-right: 10px;
+        .form-group {
+          display: flex;
+          align-items: center;
+        }
+        label {
+          white-space: nowrap;
+          font-size: 1.6rem;
+          margin-right: 16px;
+        }
+        .form-control-sort {
+          padding: 0 40px;
+          font-size: 1.6rem;
+        }
+      }
+    }
+  }
+}
+
+.product-category {
+  .container {
+    .col-lg-9 {
+      .col-lg-3 {
+        max-width: 25% !important;
+      }
+    }
+  }
+}

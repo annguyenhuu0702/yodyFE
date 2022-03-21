@@ -9,23 +9,64 @@ const productSlice = createSlice({
     getAllProduct: (state, action) => {
       state.products = action.payload;
     },
-    sortProductByName: (state) => {
+    sortProduct: (state, action) => {
+      const type = action.payload;
       const newProduct = [...state.products];
-      newProduct.sort((a, b) => {
-        const nameA = a.categoryId.toUpperCase(); // ignore upper and lowercase
-        const nameB = b.categoryId.toUpperCase(); // ignore upper and lowercase
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
+      switch (type) {
+        case "Tên A-Z":
+          newProduct.sort((a, b) => {
+            const nameA = a.name; // ignore upper and lowercase
+            const nameB = b.name; // ignore upper and lowercase
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
+          break;
+        case "Tên Z-A":
+          newProduct.sort((a, b) => {
+            const nameA = a.name; // ignore upper and lowercase
+            const nameB = b.name; // ignore upper and lowercase
+            if (nameA < nameB) {
+              return 1;
+            }
+            if (nameA > nameB) {
+              return -1;
+            }
+            return 0;
+          });
+          break;
+        case "Giá giảm dần":
+          newProduct.sort((a, b) => {
+            return b.newPrice - a.newPrice;
+          });
+          break;
+        case "Giá tăng dần":
+          newProduct.sort((a, b) => {
+            return a.newPrice - b.newPrice;
+          });
+          break;
+        default:
+          newProduct.sort((a, b) => {
+            const nameA = parseInt(a.categoryId); // ignore upper and lowercase
+            const nameB = parseInt(b.categoryId); // ignore upper and lowercase
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
+          break;
+      }
       state.products = newProduct;
     },
   },
 });
 
-export const { getAllProduct, sortProductByName } = productSlice.actions;
+export const { getAllProduct, sortProduct } = productSlice.actions;
 export default productSlice.reducer;

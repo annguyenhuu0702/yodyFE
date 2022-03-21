@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { apiGetAllProduct } from "../../../api/apiProduct";
 import Products from "../../../Components/Products/Products";
+import { sortProduct } from "../../../Redux/productSlide";
 import "./_homeproduct.scss";
 
 const HomeProducts = () => {
@@ -10,7 +11,11 @@ const HomeProducts = () => {
   const products = useSelector((state) => state.product.products);
 
   useEffect(() => {
-    apiGetAllProduct(dispatch);
+    const sortByCategory = async () => {
+      await apiGetAllProduct(dispatch);
+      dispatch(sortProduct());
+    };
+    sortByCategory();
   }, [dispatch]);
 
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./productpage.scss";
+import "./_productpage.scss";
 import Services from "../../Components/Services/Services";
 import Products from "../../Components/Products/Products";
 import ListCake from "../../Components/ListCake/ListCake";
@@ -7,7 +7,8 @@ import { apiGetAllProductByCategorySlug } from "../../api/apiProduct";
 import { useDispatch, useSelector } from "react-redux";
 import { apiGetAllBuyerType } from "../../api/apiBuyerType";
 import { useParams } from "react-router-dom";
-import { sortProductByName } from "../../Redux/productSlide";
+import { sortProduct } from "../../Redux/productSlide";
+import ProductCategory from "../ProductCategory/ProductCategory";
 
 const ProductPage = () => {
   const dispatch = useDispatch();
@@ -22,15 +23,15 @@ const ProductPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const api = async () => {
+    const sortByCategory = async () => {
       await apiGetAllProductByCategorySlug(dispatch, params.productPage);
-      dispatch(sortProductByName());
+      dispatch(sortProduct());
     };
-    api();
+    sortByCategory();
   }, [dispatch, params.productPage]);
 
   return !buyertypes.find((item) => item.slug === params.productPage) ? (
-    ""
+    <ProductCategory />
   ) : (
     <div className="men-page">
       <div className="banner-container">
