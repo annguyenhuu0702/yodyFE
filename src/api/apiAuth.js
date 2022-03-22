@@ -15,7 +15,9 @@ import {
 export const loginUSer = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post(`${URL}/v1/auth/login`, user);
+    const res = await axios.post(`${URL}/v1/auth/login`, user, {
+      withCredentials: true,
+    });
     dispatch(loginSuccess(res.data));
     navigate("/");
   } catch (err) {
@@ -43,4 +45,20 @@ export const logOut = async (dispatch, navigate) => {
   } catch (err) {
     dispatch(logoutFailed());
   }
+};
+
+export const apiRefreshToken = async () => {
+  try {
+    const res = await axios.post(
+      `${URL}/v1/auth/refresh`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+  return null;
 };

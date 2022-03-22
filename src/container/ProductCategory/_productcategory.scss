@@ -1,4 +1,5 @@
 @import "../../styles//variable";
+@import "../../styles//base";
 
 .product-category {
   margin: 40px 0;
@@ -16,17 +17,20 @@
           font-size: 1.6rem;
         }
       }
+
       .list-item {
         list-style: none;
         display: flex;
         flex-wrap: wrap;
         padding-left: 0;
+
         .filter-item {
-          border: 1px solid red;
+          border-radius: 3px;
           display: flex;
           align-items: center;
           padding: 10px 16px;
           margin: 6px 6px 6px 0;
+          background: #f2f2f2;
           cursor: pointer;
 
           span {
@@ -44,6 +48,14 @@
           }
         }
       }
+
+      .color,
+      .size,
+      .price {
+        .hidden {
+          display: none;
+        }
+      }
     }
 
     .filter-price {
@@ -52,6 +64,7 @@
           border: none;
           margin: 6px 0 6px 0;
           padding: 0;
+          background: transparent;
 
           span {
             font-size: 1.6rem;
@@ -71,6 +84,7 @@
   .col-lg-9 {
     .section-sort {
       display: flex;
+      align-items: center;
       justify-content: space-between;
 
       .count {
@@ -81,15 +95,65 @@
 
       .sort {
         padding-right: 10px;
+        position: relative;
+
+        &:hover .list-sort {
+          display: block;
+        }
+
+        .hover-sort {
+          white-space: nowrap;
+          font-size: 1.6rem;
+          display: flex;
+          align-items: center;
+
+          span {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 230px;
+            margin-left: 35px;
+            padding: 10px;
+            border: 1px solid #f2f2f2;
+            position: relative;
+
+            i {
+              margin-left: 100px;
+            }
+          }
+        }
+
+        .list-sort {
+          display: none;
+          list-style: none;
+          position: absolute;
+          top: calc(100% - 6px);
+          right: 9px;
+          width: 230px;
+          z-index: 9999;
+          background: #fff;
+          border: 1px #dde1ef solid;
+          padding: 10px !important;
+
+          li {
+            cursor: pointer;
+            font-size: 1.4rem;
+            margin: 12px 0;
+            &:hover {
+              color: $yellow;
+            }
+            span {
+              display: flex;
+              justify-content: space-between;
+            }
+          }
+        }
+
         .form-group {
           display: flex;
           align-items: center;
         }
-        label {
-          white-space: nowrap;
-          font-size: 1.6rem;
-          margin-right: 16px;
-        }
+
         .form-control-sort {
           padding: 0 40px;
           font-size: 1.6rem;

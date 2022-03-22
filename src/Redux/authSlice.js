@@ -63,6 +63,10 @@ const authSlice = createSlice({
       state.login.isFetching = false;
       state.login.error = true;
     },
+    refreshToken: (state, action) => {
+      state.login.currentUser.accessToken = action.payload;
+      localStorage.setItem("mickey:user", JSON.stringify(state.currentUser));
+    },
   },
 });
 
@@ -76,5 +80,6 @@ export const {
   logoutStart,
   logoutSuccess,
   logoutFailed,
+  refreshToken,
 } = authSlice.actions;
 export default authSlice.reducer;

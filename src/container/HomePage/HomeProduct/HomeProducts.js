@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { apiGetAllProduct } from "../../../api/apiProduct";
 import Products from "../../../Components/Products/Products";
@@ -6,6 +6,8 @@ import { sortProduct } from "../../../Redux/productSlide";
 import "./_homeproduct.scss";
 
 const HomeProducts = () => {
+  const [visible, setVisible] = useState(10);
+
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.product.products);
@@ -17,6 +19,10 @@ const HomeProducts = () => {
     };
     sortByCategory();
   }, [dispatch]);
+
+  const showMoreProduct = () => {
+    setVisible((pre) => pre + 10);
+  };
 
   return (
     <section className="home-product">
@@ -36,7 +42,10 @@ const HomeProducts = () => {
         </div>
       </div>
       <div className="product">
-        <Products products={products} />
+        <Products products={products} visible={visible} />
+      </div>
+      <div className="load-more">
+        <button onClick={showMoreProduct}>Xem thêm</button>
       </div>
     </section>
   );

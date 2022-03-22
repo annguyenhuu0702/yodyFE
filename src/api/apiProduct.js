@@ -19,3 +19,12 @@ export const apiGetAllProductByCategorySlug = async (dispatch, slug) => {
     console.log(err);
   }
 };
+
+export const apiProductBySlug = async (slug) => {
+  try {
+    const res = await axios.get(`${URL}/v1/product/slug/${slug}`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+};

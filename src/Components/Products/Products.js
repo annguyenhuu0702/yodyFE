@@ -1,36 +1,37 @@
 import React from "react";
 import "./_product.scss";
+import { Link } from "react-router-dom";
+import { URL } from "../../constants";
+import { castToVND } from "../../Common";
 
 const Products = (props) => {
-  const { products } = props;
+  const { products, visible } = props;
+
   return (
     <div className="container pl-0">
       <div className="row">
-        {products?.map((item) => {
+        {products.slice(0, visible)?.map((item) => {
           return (
             <div className="col-lg-3 product-item" key={item.id}>
               <div className="item-img">
-                <a href=" ">
+                <Link to={`/${item.slug}`}>
                   <img
                     className="w-100"
-                    src={
-                      "http://localhost:8080" +
-                      item.productColors[0].images[0]?.image
-                    }
+                    src={`${URL}/${item.productColors[0].images[0]?.image}`}
                     alt=""
                   />
-                </a>
+                </Link>
               </div>
               <div className="product-info">
                 <div className="name">
-                  <a href=" ">{item.name}</a>
+                  <Link to={`/${item.slug}`}>{item.name}</Link>
                 </div>
                 <div className="price">
-                  <span className="current">{item.newPrice}</span>
+                  <span className="current">{castToVND(item.newPrice)}</span>
                   {item.oldPrice === 0 ? (
                     ""
                   ) : (
-                    <span className="sale">{item.oldPrice}</span>
+                    <span className="sale">{castToVND(item.oldPrice)}</span>
                   )}
                 </div>
               </div>

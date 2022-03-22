@@ -96,8 +96,8 @@
 
       &:hover .header-account {
         display: block;
-        @include animation(minhhieungu, 0.3s, ease-in, 1);
-        @include keyframes(minhhieungu) {
+        @include animation(account, 0.3s, ease-in, 1);
+        @include keyframes(account) {
           from {
             opacity: 0;
           }
@@ -174,8 +174,8 @@
       position: relative;
       &:hover .cart-content {
         display: block;
-        @include animation(chubendanminhhieu, 0.3s, ease-in, 1);
-        @include keyframes(chubendanminhhieu) {
+        @include animation(cart, 0.3s, ease-in, 1);
+        @include keyframes(cart) {
           from {
             opacity: 0;
           }

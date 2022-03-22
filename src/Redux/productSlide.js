@@ -15,8 +15,8 @@ const productSlice = createSlice({
       switch (type) {
         case "Tên A-Z":
           newProduct.sort((a, b) => {
-            const nameA = a.name; // ignore upper and lowercase
-            const nameB = b.name; // ignore upper and lowercase
+            const nameA = a.name;
+            const nameB = b.name;
             if (nameA < nameB) {
               return -1;
             }
@@ -28,8 +28,8 @@ const productSlice = createSlice({
           break;
         case "Tên Z-A":
           newProduct.sort((a, b) => {
-            const nameA = a.name; // ignore upper and lowercase
-            const nameB = b.name; // ignore upper and lowercase
+            const nameA = a.name;
+            const nameB = b.name;
             if (nameA < nameB) {
               return 1;
             }
@@ -51,8 +51,8 @@ const productSlice = createSlice({
           break;
         default:
           newProduct.sort((a, b) => {
-            const nameA = parseInt(a.categoryId); // ignore upper and lowercase
-            const nameB = parseInt(b.categoryId); // ignore upper and lowercase
+            const nameA = parseInt(a.categoryId);
+            const nameB = parseInt(b.categoryId);
             if (nameA < nameB) {
               return -1;
             }

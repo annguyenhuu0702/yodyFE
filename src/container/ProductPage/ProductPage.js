@@ -1,16 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./_productpage.scss";
 import Services from "../../Components/Services/Services";
 import Products from "../../Components/Products/Products";
 import ListCake from "../../Components/ListCake/ListCake";
-import { apiGetAllProductByCategorySlug } from "../../api/apiProduct";
+import {
+  apiGetAllProductByCategorySlug,
+  apiProductBySlug,
+} from "../../api/apiProduct";
 import { useDispatch, useSelector } from "react-redux";
 import { apiGetAllBuyerType } from "../../api/apiBuyerType";
 import { useParams } from "react-router-dom";
 import { sortProduct } from "../../Redux/productSlide";
 import ProductCategory from "../ProductCategory/ProductCategory";
+import ProductDetail from "../ProductDetail/ProductDetail";
 
 const ProductPage = () => {
+  const [product, setProduct] = useState();
+
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.product.products);
@@ -30,6 +36,17 @@ const ProductPage = () => {
     sortByCategory();
   }, [dispatch, params.productPage]);
 
+  useEffect(() => {
+    const getProductBySlug = async () => {
+      const data = await apiProductBySlug(params.productPage);
+      setProduct(data);
+    };
+    getProductBySlug();
+  }, [params.productPage]);
+
+  if (product) {
+    return <ProductDetail product={product} />;
+  }
   return !buyertypes.find((item) => item.slug === params.productPage) ? (
     <ProductCategory />
   ) : (

@@ -8,13 +8,20 @@ import { sortProduct } from "../../Redux/productSlide";
 const ProductCategory = () => {
   const dispatch = useDispatch();
 
-  const products = useSelector((state) => state.product.products);
+  const products = useSelector((state) => state.product?.products);
 
   useEffect(() => {
     apiGetAllProductByCategorySlug(dispatch);
   }, [dispatch]);
 
   const [sort, setSort] = useState("Mặc định");
+
+  const [toogle, setToogle] = useState({
+    color: false,
+    size: false,
+    price: false,
+  });
+
   const options = [
     "Mặc định",
     "Tên A-Z",
@@ -23,9 +30,10 @@ const ProductCategory = () => {
     "Giá tăng dần",
   ];
 
-  useEffect(() => {
+  const handleSort = (sort) => {
     dispatch(sortProduct(sort));
-  }, [sort, dispatch]);
+    setSort(sort);
+  };
 
   return (
     <div className="product-category">
@@ -36,11 +44,24 @@ const ProductCategory = () => {
               <div className="filter-color">
                 <div className="title">
                   <h3>Màu sắc</h3>
-                  <i className="fa-solid fa-arrow-up"></i>
-                  {/* <i className="fa-solid fa-arrow-down"></i> */}
+                  <div
+                    onClick={() => {
+                      setToogle({ ...toogle, color: !toogle.color });
+                    }}
+                  >
+                    {toogle.color ? (
+                      <i className="fa-solid fa-arrow-up"></i>
+                    ) : (
+                      <i className="fa-solid fa-arrow-down"></i>
+                    )}
+                  </div>
                 </div>
                 <div className="color">
-                  <ul className="list-item list-color">
+                  <ul
+                    className={`list-item list-color ${
+                      toogle.color ? "hidden" : ""
+                    }`}
+                  >
                     <li className="filter-item">
                       <input type="checkbox" name="" defaultValue="" hidden />
                       <span>
@@ -103,10 +124,24 @@ const ProductCategory = () => {
               <div className="filter-size">
                 <div className="title">
                   <h3>Kích thước</h3>
-                  <i className="fa-solid fa-arrow-up"></i>
+                  <div
+                    onClick={() => {
+                      setToogle({ ...toogle, size: !toogle.size });
+                    }}
+                  >
+                    {toogle.size ? (
+                      <i className="fa-solid fa-arrow-up"></i>
+                    ) : (
+                      <i className="fa-solid fa-arrow-down"></i>
+                    )}
+                  </div>
                 </div>
                 <div className="size">
-                  <ul className="list-item list-size">
+                  <ul
+                    className={`list-item list-color ${
+                      toogle.size ? "hidden" : ""
+                    }`}
+                  >
                     <li className="filter-item">
                       <input type="checkbox" name="" defaultValue="" hidden />
                       <span>S</span>
@@ -125,11 +160,24 @@ const ProductCategory = () => {
               <div className="filter-price">
                 <div className="title">
                   <h3>Khoảng giá (VNĐ)</h3>
-                  <i className="fa-solid fa-arrow-up"></i>
-                  {/* <i className="fa-solid fa-arrow-down"></i> */}
+                  <div
+                    onClick={() => {
+                      setToogle({ ...toogle, price: !toogle.price });
+                    }}
+                  >
+                    {toogle.price ? (
+                      <i className="fa-solid fa-arrow-up"></i>
+                    ) : (
+                      <i className="fa-solid fa-arrow-down"></i>
+                    )}
+                  </div>
                 </div>
                 <div className="price">
-                  <ul className="list-item list-price">
+                  <ul
+                    className={`list-item list-price ${
+                      toogle.price ? "hidden" : ""
+                    }`}
+                  >
                     <li className="filter-item">
                       <input type="checkbox" name="" defaultValue="" />
                       <span>Nhỏ hơn 100.000đ</span>
@@ -152,22 +200,35 @@ const ProductCategory = () => {
               <span className="count">{products.length} sản phẩm</span>
               <div className="sort">
                 <div className="form-group d-flex">
-                  <label>Sắp xếp theo</label>
-                  <select
-                    className="form-control form-control-sort"
-                    name="sort"
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                  >
+                  <div className="hover-sort">
+                    Sắp xếp theo
+                    <span>
+                      {sort}
+                      <i className="fa-solid fa-check"></i>
+                    </span>
+                  </div>
+                  <ul className="list-sort">
                     {options.length > 0 &&
-                      options.map((item, index) => {
+                      options.map((item) => {
                         return (
-                          <option key={index} value={item}>
-                            {item}
-                          </option>
+                          <li
+                            key={item}
+                            onClick={() => {
+                              handleSort(item);
+                            }}
+                          >
+                            <span>
+                              {item}
+                              {item === sort ? (
+                                <i className="fa-solid fa-check"></i>
+                              ) : (
+                                ""
+                              )}
+                            </span>
+                          </li>
                         );
                       })}
-                  </select>
+                  </ul>
                 </div>
               </div>
             </div>
