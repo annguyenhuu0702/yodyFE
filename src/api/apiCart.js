@@ -1,4 +1,3 @@
-import axios from "axios";
 import { configAxios } from "../config/configAxios";
 import { URL } from "../constants";
 import { addToCart } from "../Redux/cartSlice";

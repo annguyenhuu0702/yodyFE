@@ -1,15 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./_navbar.scss";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../../api/apiAuth";
+import { apiGetAllBuyerType } from "../../api/apiBuyerType";
 
 const NavBar = () => {
   const category = [
-    { name: "NỮ", id: Date.now() + Math.random(), link: "nu" },
-    { name: "NAM", id: Date.now() + Math.random(), link: "nam" },
-    { name: "TRẺ EM", id: Date.now() + Math.random(), link: "tre-em" },
     { name: "POLY YODY", id: Date.now() + Math.random(), link: "polo-yody" },
     { name: "BỘ SƯU TẬP", id: Date.now() + Math.random(), link: "bo-suu-tap" },
     { name: "YODY LOVE", id: Date.now() + Math.random(), link: "yody-love" },
@@ -17,6 +15,8 @@ const NavBar = () => {
   ];
 
   const user = useSelector((state) => state.auth.login?.currentUser);
+  const buyerType = useSelector((state) => state.buyertype.buyertypes);
+  console.log(buyerType);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,6 +24,10 @@ const NavBar = () => {
   const handleLogout = () => {
     logOut(dispatch, navigate);
   };
+
+  useEffect(() => {
+    apiGetAllBuyerType(dispatch);
+  }, [dispatch]);
   return (
     <section className="header-nav-main container">
       <Link to="/" className="logo">
@@ -34,10 +38,46 @@ const NavBar = () => {
       </Link>
       <div className="header-nav">
         <ul className="header-menu">
-          {category.map((item) => {
+          {buyerType.map((item) => {
             return (
               <li className="category" key={item.id}>
-                <Link to={`/${item.link}`}>{item.name}</Link>
+                <Link className="nav-name" to={`/${item.slug}`}>
+                  {item.name}
+                </Link>
+                <div className="list-category">
+                  <div className="wrap-item d-flex">
+                    {item.groups.map((group) => {
+                      return (
+                        <div className="category-item col-lg-2" key={group.id}>
+                          <Link to={`/${group.slug}`} className="title">
+                            {group.name.split(item.name.toLowerCase())}
+                          </Link>
+                          <div className="item">
+                            {group.categories.map((category) => {
+                              return (
+                                <Link
+                                  to={`/${category.slug}`}
+                                  key={category.id}
+                                >
+                                  {category.name}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+          {category.map((item) => {
+            return (
+              <li className="category" key={item.name}>
+                <Link className="nav-name" to={`/${item.link}`}>
+                  {item.name}
+                </Link>
               </li>
             );
           })}

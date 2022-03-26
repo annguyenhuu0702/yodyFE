@@ -9,6 +9,7 @@ const ProductCategory = () => {
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.product?.products);
+  console.log(products);
 
   useEffect(() => {
     apiGetAllProductByCategorySlug(dispatch);
@@ -33,6 +34,28 @@ const ProductCategory = () => {
   const handleSort = (sort) => {
     dispatch(sortProduct(sort));
     setSort(sort);
+  };
+
+  const renderColor = () => {
+    const result = [];
+    products.forEach((productColor) => {
+      productColor.productColors.forEach((color) => {
+        if (!result.find((item) => item.color === color.color)) {
+          result.push(color);
+        }
+      });
+    });
+    return result.map((item, index) => {
+      return (
+        <li className="filter-item" key={index}>
+          <input type="checkbox" name="" defaultValue="" hidden />
+          <span>
+            <i style={{ background: item.colorCode }}></i>
+            {item.color}
+          </span>
+        </li>
+      );
+    });
   };
 
   return (
@@ -62,14 +85,8 @@ const ProductCategory = () => {
                       toogle.color ? "hidden" : ""
                     }`}
                   >
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>
-                        <i></i>
-                        Đen
-                      </span>
-                    </li>
-                    <li className="filter-item">
+                    {renderColor()}
+                    {/* <li className="filter-item">
                       <input type="checkbox" name="" defaultValue="" hidden />
                       <span>
                         <i></i>
@@ -117,7 +134,7 @@ const ProductCategory = () => {
                         <i></i>
                         Trắng
                       </span>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               </div>
@@ -138,7 +155,7 @@ const ProductCategory = () => {
                 </div>
                 <div className="size">
                   <ul
-                    className={`list-item list-color ${
+                    className={`list-item list-size ${
                       toogle.size ? "hidden" : ""
                     }`}
                   >

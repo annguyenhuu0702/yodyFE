@@ -7,6 +7,15 @@ import "./_homeproduct.scss";
 
 const HomeProducts = () => {
   const [visible, setVisible] = useState(10);
+  const [idxCategory, setInxCategory] = useState(0);
+
+  const category = [
+    "Tất cả",
+    "Thời trang nam",
+    "Thời trang nữ",
+    "Thời trang trẻ em",
+    "Polo YODY",
+  ];
 
   const dispatch = useDispatch();
 
@@ -31,12 +40,19 @@ const HomeProducts = () => {
           <h2>ĐỀ XUẤT CHO BẠN</h2>
           <div className="title-destop">
             <ul className="title-list">
-              <li className="item item-active">Tất cả </li>
-              <li className="item">Thời trang nam</li>
-              <li className="item">Thời trang nữ</li>
-              <li className="item">Thời trang trẻ em</li>
-              <li className="item">Polo YODY</li>
-              <li className="item">Quần jeans nữ</li>
+              {category.map((item, index) => {
+                return (
+                  <li
+                    key={item}
+                    className={
+                      idxCategory === index ? "item item-active" : "item"
+                    }
+                    onClick={() => setInxCategory(index)}
+                  >
+                    {item}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
