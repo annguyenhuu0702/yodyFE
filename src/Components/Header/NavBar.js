@@ -16,7 +16,6 @@ const NavBar = () => {
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const buyerType = useSelector((state) => state.buyertype.buyertypes);
-  console.log(buyerType);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

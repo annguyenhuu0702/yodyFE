@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from "react-redux";
 import ChangePageTitle from "../../Components/ChangePageTitle/ChangePageTitle";
 
 const ProductDetail = ({ product }) => {
-  console.log(product);
   const [indexColor, setIndexColor] = useState(0);
   const [indexImage, setIndexImage] = useState(0);
   const [indexSize, setIndexSize] = useState(0);
@@ -25,7 +24,6 @@ const ProductDetail = ({ product }) => {
   const user = useSelector((state) => state.auth.login.currentUser);
 
   const addToCart = (data) => {
-    console.log(data);
     apiAddToCart(user, dispatch, data);
   };
 

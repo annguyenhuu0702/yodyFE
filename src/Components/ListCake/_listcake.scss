@@ -1,19 +1,30 @@
+@import "../../styles//variable";
 .list-cake {
-  .swiper-wrapper {
-    flex-wrap: wrap;
-    .swiper-slide {
-      width: 200px !important;
-      margin: 0 20px 20px 0;
-      a {
-        border: 1px #dde1ef solid;
-        display: flex;
-        height: 120px;
-        padding-left: 80px;
-        font-size: 16px;
-        align-items: center;
-        color: #000;
-        position: relative;
-        overflow: hidden;
+  .col-lg-3 {
+    max-width: 20%;
+    .list-cake-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 26px 0;
+      border: 1px solid #e1e4f1;
+      margin-bottom: 10px;
+      cursor: pointer;
+      text-transform: capitalize;
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      img {
+        width: 62px;
+      }
+
+      span {
+        font-size: 1.6rem;
+        color: $black;
+        font-weight: 500;
+        margin-left: 10px;
       }
     }
   }

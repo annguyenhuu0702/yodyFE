@@ -17,6 +17,11 @@ import ChangePageTitle from "../../Components/ChangePageTitle/ChangePageTitle";
 
 const ProductPage = () => {
   const [product, setProduct] = useState();
+
+  const [categories, setCategories] = useState([]);
+
+  const [buyerType, setBuyerType] = useState();
+
   const params = useParams();
 
   const products = useSelector((state) => state.product.products);
@@ -24,10 +29,12 @@ const ProductPage = () => {
 
   const dispatch = useDispatch();
 
+  // gọi api buyertype
   useEffect(() => {
     apiGetAllBuyerType(dispatch);
   }, [dispatch]);
 
+  // lấy sản phẩm theo slug, ví dụ: ao-thun-nam, ao-nam
   useEffect(() => {
     const sortByCategory = async () => {
       await apiGetAllProductByCategorySlug(dispatch, params.productPage);
@@ -36,6 +43,7 @@ const ProductPage = () => {
     sortByCategory();
   }, [dispatch, params.productPage]);
 
+  // lấy chi tiết sản phẩm
   useEffect(() => {
     const getProductBySlug = async () => {
       const data = await apiProductBySlug(params.productPage);
@@ -44,10 +52,30 @@ const ProductPage = () => {
     getProductBySlug();
   }, [params.productPage]);
 
+  // category truyền qua list cake
+  useEffect(() => {
+    const result = [];
+    buyertypes.forEach((buyertype) => {
+      buyertype.groups.forEach((group) => {
+        group.categories.forEach((item) => {
+          if (item.slug.indexOf(params.productPage) !== -1) {
+            result.push(item);
+          }
+        });
+      });
+    });
+    setCategories(result);
+  }, [buyertypes, params.productPage]);
+
+  // cắt chuỗi nam, nữ ở list cake
+  useEffect(() => {
+    setBuyerType(buyertypes.find((item) => item.slug === params.productPage));
+  }, [buyertypes, params.productPage]);
+
   if (product) {
     return <ProductDetail product={product} />;
   }
-  return !buyertypes.find((item) => item.slug === params.productPage) ? (
+  return !buyerType ? (
     <>
       <ChangePageTitle pageTitle={params.productPage} />
       <ProductCategory />
@@ -68,7 +96,7 @@ const ProductPage = () => {
           <div className="title-block">
             <h3>MUA THEO THỂ LOẠI</h3>
           </div>
-          <ListCake />
+          <ListCake categories={categories} buyerType={buyerType} />
         </div>
         <div className="container pl-0">
           <div className="title-block">

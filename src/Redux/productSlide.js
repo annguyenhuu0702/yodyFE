@@ -49,6 +49,11 @@ const productSlice = createSlice({
             return a.newPrice - b.newPrice;
           });
           break;
+        case "Mặc định":
+          newProduct.sort((a, b) => {
+            return a.newPrice - b.newPrice;
+          });
+          break;
         default:
           newProduct.sort((a, b) => {
             const nameA = parseInt(a.categoryId);

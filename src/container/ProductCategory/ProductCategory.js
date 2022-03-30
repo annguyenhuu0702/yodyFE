@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from "react";
-import Products from "../../Components/Products/Products";
-import "./_productcategory.scss";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { apiGetAllProductByCategorySlug } from "../../api/apiProduct";
+import Products from "../../Components/Products/Products";
 import { sortProduct } from "../../Redux/productSlide";
+import "./_productcategory.scss";
 
 const ProductCategory = () => {
-  const dispatch = useDispatch();
-
-  const products = useSelector((state) => state.product?.products);
-  console.log(products);
-
-  useEffect(() => {
-    apiGetAllProductByCategorySlug(dispatch);
-  }, [dispatch]);
-
   const [sort, setSort] = useState("Mặc định");
 
   const [toogle, setToogle] = useState({
@@ -22,6 +13,8 @@ const ProductCategory = () => {
     size: false,
     price: false,
   });
+
+  const [visible, setVisible] = useState(8);
 
   const options = [
     "Mặc định",
@@ -31,32 +24,157 @@ const ProductCategory = () => {
     "Giá tăng dần",
   ];
 
+  const colors = [
+    {
+      color: "Xanh navy",
+      colorCode: "#03204C",
+    },
+    {
+      color: "Đen",
+      colorCode: "#000000",
+    },
+    {
+      color: "Xanh lá",
+      colorCode: "#62BF5E",
+    },
+    {
+      color: "Nâu",
+      colorCode: "#613B0D",
+    },
+    {
+      color: "Mint",
+      colorCode: "#8CD6C4",
+    },
+    {
+      color: "Xám",
+      colorCode: "#C1C5C0",
+    },
+    {
+      color: "Đỏ ",
+      colorCode: "#F10008",
+    },
+    {
+      color: "Xanh",
+      colorCode: "#6BBBDD",
+    },
+    {
+      color: "Tím than",
+      colorCode: "#321B3B",
+    },
+    {
+      color: "Vàng",
+      colorCode: "#EFE159",
+    },
+    {
+      color: "Trắng",
+      colorCode: "#FFFFFF",
+    },
+    {
+      color: "Hồng",
+      colorCode: "#DC85AC",
+    },
+    {
+      color: "Be",
+      colorCode: "#E3CCB5",
+    },
+    {
+      color: "Cam",
+      colorCode: "#F19F00",
+    },
+    {
+      color: "Tím ",
+      colorCode: "#C48FE2",
+    },
+    {
+      color: "Xanh cổ vịt",
+      colorCode: "#00867D",
+    },
+  ];
+
+  const sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+
+  const color = useRef();
+
+  const dispatch = useDispatch();
+
+  const products = useSelector((state) => state.product?.products);
+
+  // sản phẩm theo category slug, group category slug
+  useEffect(() => {
+    apiGetAllProductByCategorySlug(dispatch);
+  }, [dispatch]);
+
   const handleSort = (sort) => {
     dispatch(sortProduct(sort));
     setSort(sort);
   };
 
-  const renderColor = () => {
-    const result = [];
-    products.forEach((productColor) => {
-      productColor.productColors.forEach((color) => {
-        if (!result.find((item) => item.color === color.color)) {
-          result.push(color);
-        }
-      });
-    });
-    return result.map((item, index) => {
-      return (
-        <li className="filter-item" key={index}>
-          <input type="checkbox" name="" defaultValue="" hidden />
-          <span>
-            <i style={{ background: item.colorCode }}></i>
-            {item.color}
-          </span>
-        </li>
-      );
+  const handleLoadMore = () => {
+    setVisible((prev) => {
+      if (prev === 8) {
+        prev = colors.length;
+      } else {
+        prev = 8;
+      }
+      return prev;
     });
   };
+
+  const handleMoseEnter = (target, colorCode) => {
+    color.current = target;
+    target.style.border = `1px solid ${colorCode}`;
+  };
+
+  const handleMouseLeave = () => {
+    color.current.style.border = `1px solid transparent`;
+  };
+
+  // const renderColor = () => {
+  //   const result = [];
+  //   products.forEach((productColor) => {
+  //     productColor.productColors.forEach((color) => {
+  //       if (!result.find((item) => item.color === color.color)) {
+  //         result.push(color);
+  //       }
+  //     });
+  //   });
+  //   return result.map((item, index) => {
+  //     return (
+  //       <li className="filter-item" key={index}>
+  //         <input type="checkbox" name="" defaultValue="" hidden />
+  //         <span>
+  //           <i style={{ background: item.colorCode }}></i>
+  //           {item.color}
+  //         </span>
+  //       </li>
+  //     );
+  //   });
+  // };
+
+  // const renderSize = () => {
+  //   const result = [];
+  //   products.forEach((productColor) => {
+  //     productColor.productColors.forEach((sizes) => {
+  //       sizes.sizes.forEach((size) => {
+  //         if (!result.find((item) => item.size === size.size)) {
+  //           result.push(size);
+  //         }
+  //       });
+  //     });
+  //   });
+  //   result.sort(
+  //     (a, b) =>
+  //       convertSizeStringToNumber(a.size) - convertSizeStringToNumber(b.size)
+  //   );
+  //   return result.map((item, index) => {
+  //     return (
+  //       <li className="filter-item" key={index}>
+  //         <input type="checkbox" name="" defaultValue="" hidden />
+  //         <span>{item.size}</span>
+  //       </li>
+  //     );
+  //   });
+  // };
 
   return (
     <div className="product-category">
@@ -85,57 +203,49 @@ const ProductCategory = () => {
                       toogle.color ? "hidden" : ""
                     }`}
                   >
-                    {renderColor()}
-                    {/* <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>
-                        <i></i>
-                        Trắng
-                      </span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>
-                        <i></i>
-                        Đen
-                      </span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>
-                        <i></i>
-                        Xanh navy
-                      </span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>
-                        <i></i>
-                        Đen
-                      </span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>
-                        <i></i>
-                        Trắng
-                      </span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>
-                        <i></i>
-                        Đen
-                      </span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>
-                        <i></i>
-                        Trắng
-                      </span>
-                    </li> */}
+                    {colors &&
+                      colors.length > 0 &&
+                      colors.slice(0, visible).map((item) => {
+                        return (
+                          <li
+                            className="filter-item"
+                            key={item.color}
+                            ref={color}
+                            onMouseEnter={(e) =>
+                              handleMoseEnter(e.target, item.colorCode)
+                            }
+                            onMouseLeave={() => handleMouseLeave()}
+                          >
+                            <input
+                              type="checkbox"
+                              name=""
+                              defaultValue=""
+                              hidden
+                            />
+                            <span>
+                              <i
+                                style={{
+                                  backgroundColor: item.colorCode,
+                                }}
+                              ></i>
+                              {item.color}
+                            </span>
+                          </li>
+                        );
+                      })}
                   </ul>
+                  {colors.length <= 8 ? (
+                    ""
+                  ) : (
+                    <span
+                      className="visible"
+                      onClick={() => {
+                        handleLoadMore();
+                      }}
+                    >
+                      {visible <= 8 ? "Xem thêm" : "Thu gọn"}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="filter-size">
@@ -159,18 +269,21 @@ const ProductCategory = () => {
                       toogle.size ? "hidden" : ""
                     }`}
                   >
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>S</span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>M</span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" hidden />
-                      <span>L</span>
-                    </li>
+                    {sizes &&
+                      sizes.length > 0 &&
+                      sizes.map((item) => {
+                        return (
+                          <li className="filter-item" key={item}>
+                            <input
+                              type="checkbox"
+                              name=""
+                              defaultValue=""
+                              hidden
+                            />
+                            <span>{item}</span>
+                          </li>
+                        );
+                      })}
                   </ul>
                 </div>
               </div>
@@ -205,7 +318,15 @@ const ProductCategory = () => {
                     </li>
                     <li className="filter-item">
                       <input type="checkbox" name="" defaultValue="" />
-                      <span>Lớn hơn 300.000đ</span>
+                      <span>Từ 300.000đ - 500.000đ</span>
+                    </li>
+                    <li className="filter-item">
+                      <input type="checkbox" name="" defaultValue="" />
+                      <span>Từ 500.000đ - 700.000đ</span>
+                    </li>
+                    <li className="filter-item">
+                      <input type="checkbox" name="" defaultValue="" />
+                      <span>Lớn hơn 700.000đ</span>
                     </li>
                   </ul>
                 </div>
@@ -214,7 +335,11 @@ const ProductCategory = () => {
           </div>
           <div className="col-lg-9 right">
             <div className="section-sort">
-              <span className="count">{products.length} sản phẩm</span>
+              <span className="count">
+                {products.length > 0
+                  ? `${products.length} sản phẩm`
+                  : "Sản phẩm đang được cập nhật .........."}
+              </span>
               <div className="sort">
                 <div className="form-group d-flex">
                   <div className="hover-sort">
