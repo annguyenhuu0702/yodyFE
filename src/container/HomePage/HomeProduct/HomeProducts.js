@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { apiGetAllProduct } from "../../../api/apiProduct";
+import {
+  apiGetAllProduct,
+  apiGetAllProductByCategorySlug,
+} from "../../../api/apiProduct";
 import Products from "../../../Components/Products/Products";
 import { sortProduct } from "../../../Redux/productSlide";
 import "./_homeproduct.scss";
@@ -9,17 +12,10 @@ const HomeProducts = () => {
   const [visible, setVisible] = useState(10);
   const [idxCategory, setInxCategory] = useState(0);
 
-  const category = [
-    "Tất cả",
-    "Thời trang nam",
-    "Thời trang nữ",
-    "Thời trang trẻ em",
-    "Polo YODY",
-  ];
-
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.product.products);
+  const buyertypes = useSelector((state) => state.buyertype.buyertypes);
 
   useEffect(() => {
     const sortByCategory = async () => {
@@ -30,7 +26,27 @@ const HomeProducts = () => {
   }, [dispatch]);
 
   const showMoreProduct = () => {
-    setVisible((pre) => pre + 10);
+    setVisible((prev) => {
+      if (prev === products.length) {
+        prev = 10;
+      } else {
+        prev = prev + 10;
+        if (prev > products.length) {
+          prev = products.length;
+        }
+      }
+      return prev;
+    });
+  };
+
+  const getProductsByBuyertype = (item, index) => {
+    apiGetAllProductByCategorySlug(dispatch, item.slug);
+    setInxCategory(index + 1);
+  };
+
+  const getAllProduct = () => {
+    apiGetAllProduct(dispatch);
+    setInxCategory(0);
   };
 
   return (
@@ -40,19 +56,31 @@ const HomeProducts = () => {
           <h2>ĐỀ XUẤT CHO BẠN</h2>
           <div className="title-destop">
             <ul className="title-list">
-              {category.map((item, index) => {
+              <li
+                className={`item ${0 === idxCategory ? "item-active" : "item"}`}
+                onClick={() => {
+                  getAllProduct();
+                }}
+              >
+                Tất cả
+              </li>
+              {buyertypes.map((item, index) => {
                 return (
                   <li
-                    key={item}
-                    className={
-                      idxCategory === index ? "item item-active" : "item"
-                    }
-                    onClick={() => setInxCategory(index)}
+                    className={`item ${
+                      index + 1 === idxCategory ? "item-active" : "item"
+                    }`}
+                    key={item.name}
+                    onClick={() => {
+                      getProductsByBuyertype(item, index);
+                    }}
                   >
-                    {item}
+                    Thời trang {item.name}
                   </li>
                 );
               })}
+
+              <li className="item">Polo yody</li>
             </ul>
           </div>
         </div>
@@ -61,7 +89,9 @@ const HomeProducts = () => {
         <Products products={products} visible={visible} />
       </div>
       <div className="load-more">
-        <button onClick={showMoreProduct}>Xem thêm</button>
+        <button onClick={showMoreProduct}>
+          {visible === products.length ? "Thu gọn" : "Xem thêm"}
+        </button>
       </div>
     </section>
   );

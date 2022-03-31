@@ -9,6 +9,7 @@
   }
 
   .container {
+    padding-left: 0 !important;
     .title-block {
       margin: 36px 0;
       h3 {
@@ -20,6 +21,10 @@
     .banner {
       display: flex;
       margin-bottom: 70px;
+
+      .col-lg-6 {
+        padding: 0 !important;
+      }
     }
   }
 }

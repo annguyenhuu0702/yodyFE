@@ -16,7 +16,7 @@ const ListCake = (props) => {
                 return "";
               }
               return (
-                <div className="col-lg-3">
+                <div className="col-lg-3" key={item.id}>
                   <Link to={`/${item.slug}`} className="list-cake-item">
                     <img src={`${URL}/${item.icon}`} alt="" />
                     <span>{item.name.split(buyerType.name.toLowerCase())}</span>

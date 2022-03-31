@@ -39,6 +39,7 @@
   }
 
   .main-product {
+    margin-bottom: 60px;
     .container {
       .left {
         .product-detail-img {
@@ -135,10 +136,11 @@
               display: flex;
               margin: 10px 0 20px 0;
               .item {
+                font-size: 1.6rem;
                 cursor: pointer;
                 width: 50px;
                 text-align: center;
-                padding: 10px;
+                padding: 10px 0;
                 margin: 0 16px 0 0;
                 border: 1px solid #dde1ef;
               }
@@ -210,6 +212,15 @@
             background: #fcaf17;
             color: $white;
             font-weight: 500;
+          }
+        }
+
+        .sec-services {
+          .services-list {
+            .services-content {
+              padding: 14px 20px;
+              border: 1px solid #e1e4f1;
+            }
           }
         }
       }

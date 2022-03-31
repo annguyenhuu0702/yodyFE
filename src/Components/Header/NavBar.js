@@ -58,7 +58,7 @@ const NavBar = () => {
                                   to={`/${category.slug}`}
                                   key={category.id}
                                 >
-                                  {category.name}
+                                  {category.name.split("trẻ em")}
                                 </Link>
                               );
                             })}

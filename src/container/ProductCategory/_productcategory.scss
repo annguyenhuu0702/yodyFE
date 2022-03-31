@@ -7,11 +7,32 @@
   .col-lg-3 {
     padding-left: 0;
     .filter {
+      padding-top: 40px;
+
+      .filtered {
+        margin-bottom: 20px;
+        .filtered-header {
+          display: flex;
+          justify-content: space-between;
+          font-size: 1.6rem;
+          color: $black;
+          font-weight: 500;
+          margin-bottom: 10px;
+
+          .clear-all {
+            cursor: pointer;
+
+            &:hover {
+              color: $yellow;
+            }
+          }
+        }
+      }
+
       .title {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-top: 40px;
 
         i {
           font-size: 1.6rem;

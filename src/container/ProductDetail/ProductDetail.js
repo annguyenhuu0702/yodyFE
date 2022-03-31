@@ -1,22 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./_productdetail.scss";
 import { URL } from "../../constants/index";
 import { castToVND, convertSizeStringToNumber } from "../../Common";
 import { apiAddToCart } from "../../api/apiCart";
 import { useSelector, useDispatch } from "react-redux";
 import ChangePageTitle from "../../Components/ChangePageTitle/ChangePageTitle";
+import { apiProductBySlug } from "../../api/apiProduct";
+import Services from "../../Components/Services/Services";
 
-const ProductDetail = ({ product }) => {
+const ProductDetail = () => {
   const [indexColor, setIndexColor] = useState(0);
   const [indexImage, setIndexImage] = useState(0);
   const [indexSize, setIndexSize] = useState(0);
 
   const [qtt, setQtt] = useState(1);
 
+  const [product, setProduct] = useState();
+
+  const params = useParams();
+
   useEffect(() => {
     setIndexImage(0);
   }, [indexColor]);
+
+  useEffect(() => {
+    const api = async () => {
+      const data = await apiProductBySlug(params.productDetail);
+      setProduct(data);
+    };
+    api();
+  }, [params.productDetail]);
 
   const handleQtt = () => {};
 
@@ -27,6 +41,7 @@ const ProductDetail = ({ product }) => {
     apiAddToCart(user, dispatch, data);
   };
 
+  if (!product) return "";
   return (
     <>
       <ChangePageTitle pageTitle={product.name} />
@@ -227,6 +242,9 @@ const ProductDetail = ({ product }) => {
                     Muan ngay
                   </button>
                 </div>
+                <>
+                  <Services col={6} />
+                </>
               </div>
             </div>
           </div>

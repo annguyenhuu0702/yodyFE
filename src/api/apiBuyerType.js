@@ -1,6 +1,5 @@
 import axios from "axios";
 import { URL } from "../constants";
-
 import { getAllBuyerType } from "../Redux/buyerTypeSlice";
 
 export const apiGetAllBuyerType = async (dispatch) => {

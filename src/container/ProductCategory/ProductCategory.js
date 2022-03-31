@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { apiGetAllProductByCategorySlug } from "../../api/apiProduct";
+import ChangePageTitle from "../../Components/ChangePageTitle/ChangePageTitle";
 import Products from "../../Components/Products/Products";
 import { sortProduct } from "../../Redux/productSlide";
 import "./_productcategory.scss";
 
-const ProductCategory = () => {
+const ProductCategory = ({ groupCategory, category }) => {
   const [sort, setSort] = useState("Mặc định");
 
   const [toogle, setToogle] = useState({
@@ -13,8 +14,6 @@ const ProductCategory = () => {
     size: false,
     price: false,
   });
-
-  const [visible, setVisible] = useState(8);
 
   const options = [
     "Mặc định",
@@ -93,21 +92,26 @@ const ProductCategory = () => {
 
   const sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
 
-  const color = useRef();
-
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.product?.products);
 
+  // áo quần phụ kiện---------áo thun nam, áo polo nam....
+  const slug = groupCategory ? groupCategory.slug : category.slug;
+
   // sản phẩm theo category slug, group category slug
   useEffect(() => {
-    apiGetAllProductByCategorySlug(dispatch);
-  }, [dispatch]);
+    apiGetAllProductByCategorySlug(dispatch, slug);
+  }, [dispatch, slug]);
 
+  // sort product
   const handleSort = (sort) => {
     dispatch(sortProduct(sort));
     setSort(sort);
   };
+
+  // loadmore color
+  const [visible, setVisible] = useState(8);
 
   const handleLoadMore = () => {
     setVisible((prev) => {
@@ -120,6 +124,9 @@ const ProductCategory = () => {
     });
   };
 
+  // hover border color
+  const color = useRef();
+
   const handleMoseEnter = (target, colorCode) => {
     color.current = target;
     target.style.border = `1px solid ${colorCode}`;
@@ -129,256 +136,273 @@ const ProductCategory = () => {
     color.current.style.border = `1px solid transparent`;
   };
 
-  // const renderColor = () => {
-  //   const result = [];
-  //   products.forEach((productColor) => {
-  //     productColor.productColors.forEach((color) => {
-  //       if (!result.find((item) => item.color === color.color)) {
-  //         result.push(color);
-  //       }
-  //     });
-  //   });
-  //   return result.map((item, index) => {
-  //     return (
-  //       <li className="filter-item" key={index}>
-  //         <input type="checkbox" name="" defaultValue="" hidden />
-  //         <span>
-  //           <i style={{ background: item.colorCode }}></i>
-  //           {item.color}
-  //         </span>
-  //       </li>
-  //     );
-  //   });
-  // };
+  // filtered
+  const [selectedFilter, setSelectedFilter] = useState({
+    colors: [],
+    sizes: [],
+    prices: [],
+  });
 
-  // const renderSize = () => {
-  //   const result = [];
-  //   products.forEach((productColor) => {
-  //     productColor.productColors.forEach((sizes) => {
-  //       sizes.sizes.forEach((size) => {
-  //         if (!result.find((item) => item.size === size.size)) {
-  //           result.push(size);
-  //         }
-  //       });
-  //     });
-  //   });
-  //   result.sort(
-  //     (a, b) =>
-  //       convertSizeStringToNumber(a.size) - convertSizeStringToNumber(b.size)
-  //   );
-  //   return result.map((item, index) => {
-  //     return (
-  //       <li className="filter-item" key={index}>
-  //         <input type="checkbox" name="" defaultValue="" hidden />
-  //         <span>{item.size}</span>
-  //       </li>
-  //     );
-  //   });
-  // };
+  const selectFilter = (item, key) => {
+    const newFiltered = { ...selectedFilter };
+    let index = -1;
+    if (key === "colors") {
+      index = newFiltered[key].findIndex((color) => color.color === item.color);
+    } else if (key === "sizes") {
+      index = newFiltered[key].findIndex((size) => size === item);
+    }
+    if (index !== -1) {
+      newFiltered[key].splice(index, 1);
+    } else {
+      newFiltered[key].push(item);
+    }
+    setSelectedFilter(newFiltered);
+  };
 
   return (
-    <div className="product-category">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-3 left">
-            <div className="filter">
-              <div className="filter-color">
-                <div className="title">
-                  <h3>Màu sắc</h3>
-                  <div
-                    onClick={() => {
-                      setToogle({ ...toogle, color: !toogle.color });
-                    }}
-                  >
-                    {toogle.color ? (
-                      <i className="fa-solid fa-arrow-up"></i>
-                    ) : (
-                      <i className="fa-solid fa-arrow-down"></i>
-                    )}
-                  </div>
-                </div>
-                <div className="color">
-                  <ul
-                    className={`list-item list-color ${
-                      toogle.color ? "hidden" : ""
-                    }`}
-                  >
-                    {colors &&
-                      colors.length > 0 &&
-                      colors.slice(0, visible).map((item) => {
-                        return (
-                          <li
-                            className="filter-item"
-                            key={item.color}
-                            ref={color}
-                            onMouseEnter={(e) =>
-                              handleMoseEnter(e.target, item.colorCode)
-                            }
-                            onMouseLeave={() => handleMouseLeave()}
-                          >
-                            <input
-                              type="checkbox"
-                              name=""
-                              defaultValue=""
-                              hidden
-                            />
-                            <span>
-                              <i
-                                style={{
-                                  backgroundColor: item.colorCode,
-                                }}
-                              ></i>
-                              {item.color}
-                            </span>
-                          </li>
-                        );
+    <>
+      <ChangePageTitle
+        pageTitle={
+          groupCategory
+            ? groupCategory.name.toUpperCase()
+            : category.name.toUpperCase()
+        }
+      />
+      <div className="product-category">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-3 left">
+              <div className="filter">
+                {selectedFilter.colors.length > 0 ||
+                selectedFilter.sizes.length > 0 ||
+                selectedFilter.prices.length > 0 ? (
+                  <div className="filtered">
+                    <div className="filtered-header">
+                      <span className="choose">Bạn chọn</span>
+                      <span className="clear-all">Bỏ hết</span>
+                    </div>
+                    <div className="filtered-container">
+                      {selectedFilter.colors.map((item) => {
+                        return <span>{item.color}</span>;
                       })}
-                  </ul>
-                  {colors.length <= 8 ? (
-                    ""
-                  ) : (
-                    <span
-                      className="visible"
+                      {selectedFilter.sizes.map((item) => {
+                        return <span>{item}</span>;
+                      })}
+                      {selectedFilter.prices.map((item) => {
+                        return <span>{item}</span>;
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <div className="filter-color">
+                  <div className="title">
+                    <h3>Màu sắc</h3>
+                    <div
                       onClick={() => {
-                        handleLoadMore();
+                        setToogle({ ...toogle, color: !toogle.color });
                       }}
                     >
-                      {visible <= 8 ? "Xem thêm" : "Thu gọn"}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="filter-size">
-                <div className="title">
-                  <h3>Kích thước</h3>
-                  <div
-                    onClick={() => {
-                      setToogle({ ...toogle, size: !toogle.size });
-                    }}
-                  >
-                    {toogle.size ? (
-                      <i className="fa-solid fa-arrow-up"></i>
+                      {toogle.color ? (
+                        <i className="fa-solid fa-arrow-up"></i>
+                      ) : (
+                        <i className="fa-solid fa-arrow-down"></i>
+                      )}
+                    </div>
+                  </div>
+                  <div className="color">
+                    <ul
+                      className={`list-item list-color ${
+                        toogle.color ? "hidden" : ""
+                      }`}
+                    >
+                      {colors &&
+                        colors.length > 0 &&
+                        colors.slice(0, visible).map((item) => {
+                          return (
+                            <li
+                              className="filter-item"
+                              key={item.color}
+                              ref={color}
+                              onMouseEnter={(e) =>
+                                handleMoseEnter(e.target, item.colorCode)
+                              }
+                              onMouseLeave={() => handleMouseLeave()}
+                              onClick={() => {
+                                selectFilter(item, "colors");
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                name=""
+                                defaultValue=""
+                                hidden
+                              />
+                              <span>
+                                <i
+                                  style={{
+                                    backgroundColor: item.colorCode,
+                                  }}
+                                ></i>
+                                {item.color}
+                              </span>
+                            </li>
+                          );
+                        })}
+                    </ul>
+                    {colors.length <= 8 ? (
+                      ""
                     ) : (
-                      <i className="fa-solid fa-arrow-down"></i>
+                      <span
+                        className="visible"
+                        onClick={() => {
+                          handleLoadMore();
+                        }}
+                      >
+                        {visible <= 8 ? "Xem thêm" : "Thu gọn"}
+                      </span>
                     )}
                   </div>
                 </div>
-                <div className="size">
-                  <ul
-                    className={`list-item list-size ${
-                      toogle.size ? "hidden" : ""
-                    }`}
-                  >
-                    {sizes &&
-                      sizes.length > 0 &&
-                      sizes.map((item) => {
-                        return (
-                          <li className="filter-item" key={item}>
-                            <input
-                              type="checkbox"
-                              name=""
-                              defaultValue=""
-                              hidden
-                            />
-                            <span>{item}</span>
-                          </li>
-                        );
-                      })}
-                  </ul>
-                </div>
-              </div>
-              <div className="filter-price">
-                <div className="title">
-                  <h3>Khoảng giá (VNĐ)</h3>
-                  <div
-                    onClick={() => {
-                      setToogle({ ...toogle, price: !toogle.price });
-                    }}
-                  >
-                    {toogle.price ? (
-                      <i className="fa-solid fa-arrow-up"></i>
-                    ) : (
-                      <i className="fa-solid fa-arrow-down"></i>
-                    )}
+                <div className="filter-size">
+                  <div className="title">
+                    <h3>Kích thước</h3>
+                    <div
+                      onClick={() => {
+                        setToogle({ ...toogle, size: !toogle.size });
+                      }}
+                    >
+                      {toogle.size ? (
+                        <i className="fa-solid fa-arrow-up"></i>
+                      ) : (
+                        <i className="fa-solid fa-arrow-down"></i>
+                      )}
+                    </div>
+                  </div>
+                  <div className="size">
+                    <ul
+                      className={`list-item list-size ${
+                        toogle.size ? "hidden" : ""
+                      }`}
+                    >
+                      {sizes &&
+                        sizes.length > 0 &&
+                        sizes.map((item) => {
+                          return (
+                            <li
+                              className="filter-item"
+                              key={item}
+                              onClick={() => {
+                                selectFilter(item, "sizes");
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                name=""
+                                defaultValue=""
+                                hidden
+                              />
+                              <span>{item}</span>
+                            </li>
+                          );
+                        })}
+                    </ul>
                   </div>
                 </div>
-                <div className="price">
-                  <ul
-                    className={`list-item list-price ${
-                      toogle.price ? "hidden" : ""
-                    }`}
-                  >
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" />
-                      <span>Nhỏ hơn 100.000đ</span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" />
-                      <span>Từ 100.000đ - 300.000đ</span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" />
-                      <span>Từ 300.000đ - 500.000đ</span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" />
-                      <span>Từ 500.000đ - 700.000đ</span>
-                    </li>
-                    <li className="filter-item">
-                      <input type="checkbox" name="" defaultValue="" />
-                      <span>Lớn hơn 700.000đ</span>
-                    </li>
-                  </ul>
+                <div className="filter-price">
+                  <div className="title">
+                    <h3>Khoảng giá (VNĐ)</h3>
+                    <div
+                      onClick={() => {
+                        setToogle({ ...toogle, price: !toogle.price });
+                      }}
+                    >
+                      {toogle.price ? (
+                        <i className="fa-solid fa-arrow-up"></i>
+                      ) : (
+                        <i className="fa-solid fa-arrow-down"></i>
+                      )}
+                    </div>
+                  </div>
+                  <div className="price">
+                    <ul
+                      className={`list-item list-price ${
+                        toogle.price ? "hidden" : ""
+                      }`}
+                    >
+                      <li className="filter-item">
+                        <input type="checkbox" name="" defaultValue="" />
+                        <span>Nhỏ hơn 100.000đ</span>
+                      </li>
+                      <li className="filter-item">
+                        <input type="checkbox" name="" defaultValue="" />
+                        <span>Từ 100.000đ - 300.000đ</span>
+                      </li>
+                      <li className="filter-item">
+                        <input type="checkbox" name="" defaultValue="" />
+                        <span>Từ 300.000đ - 500.000đ</span>
+                      </li>
+                      <li className="filter-item">
+                        <input type="checkbox" name="" defaultValue="" />
+                        <span>Từ 500.000đ - 700.000đ</span>
+                      </li>
+                      <li className="filter-item">
+                        <input type="checkbox" name="" defaultValue="" />
+                        <span>Lớn hơn 700.000đ</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="col-lg-9 right">
-            <div className="section-sort">
-              <span className="count">
-                {products.length > 0
-                  ? `${products.length} sản phẩm`
-                  : "Sản phẩm đang được cập nhật .........."}
-              </span>
-              <div className="sort">
-                <div className="form-group d-flex">
-                  <div className="hover-sort">
-                    Sắp xếp theo
-                    <span>
-                      {sort}
-                      <i className="fa-solid fa-check"></i>
-                    </span>
+            <div className="col-lg-9 right">
+              <div className="section-sort">
+                <span className="count">
+                  {products.length > 0
+                    ? `${products.length} sản phẩm`
+                    : "Sản phẩm đang được cập nhật .........."}
+                </span>
+                <div className="sort">
+                  <div className="form-group d-flex">
+                    <div className="hover-sort">
+                      Sắp xếp theo
+                      <span>
+                        {sort}
+                        <i className="fa-solid fa-check"></i>
+                      </span>
+                    </div>
+                    <ul className="list-sort">
+                      {options.length > 0 &&
+                        options.map((item) => {
+                          return (
+                            <li
+                              key={item}
+                              onClick={() => {
+                                handleSort(item);
+                              }}
+                            >
+                              <span>
+                                {item}
+                                {item === sort ? (
+                                  <i className="fa-solid fa-check"></i>
+                                ) : (
+                                  ""
+                                )}
+                              </span>
+                            </li>
+                          );
+                        })}
+                    </ul>
                   </div>
-                  <ul className="list-sort">
-                    {options.length > 0 &&
-                      options.map((item) => {
-                        return (
-                          <li
-                            key={item}
-                            onClick={() => {
-                              handleSort(item);
-                            }}
-                          >
-                            <span>
-                              {item}
-                              {item === sort ? (
-                                <i className="fa-solid fa-check"></i>
-                              ) : (
-                                ""
-                              )}
-                            </span>
-                          </li>
-                        );
-                      })}
-                  </ul>
                 </div>
               </div>
+              <Products products={products} />
             </div>
-            <Products products={products} />
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
