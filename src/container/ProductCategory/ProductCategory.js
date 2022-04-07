@@ -92,6 +92,25 @@ const ProductCategory = ({ groupCategory, category }) => {
 
   const sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
 
+  const prices = [
+    {
+      price: "Nhỏ hơn 100.000đ",
+    },
+    {
+      price: "Từ 100.000đ - 300.000đ",
+    },
+    {
+      price: "Từ 300.000đ - 500.000đ",
+    },
+    {
+      price: "Từ 500.000đ - 700.000đ",
+    },
+
+    {
+      price: "Lớn hơn 700.000đ",
+    },
+  ];
+
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.product?.products);
@@ -150,6 +169,8 @@ const ProductCategory = ({ groupCategory, category }) => {
       index = newFiltered[key].findIndex((color) => color.color === item.color);
     } else if (key === "sizes") {
       index = newFiltered[key].findIndex((size) => size === item);
+    } else if (key === "prices") {
+      index = newFiltered[key].findIndex((price) => price === item);
     }
     if (index !== -1) {
       newFiltered[key].splice(index, 1);
@@ -157,6 +178,19 @@ const ProductCategory = ({ groupCategory, category }) => {
       newFiltered[key].push(item);
     }
     setSelectedFilter(newFiltered);
+  };
+
+  // bỏ chọn từng item
+  const handleDeleteFilter = (item, key) => {
+    let result = { ...selectedFilter }[key];
+    if (key === "colors") {
+      result = result.filter((color) => color.color !== item);
+    } else if (key === "sizes") {
+      result = result.filter((size) => size !== item);
+    } else if (key === "prices") {
+      result = result.filter((price) => price !== item);
+    }
+    setSelectedFilter({ ...selectedFilter, [key]: result });
   };
 
   return (
@@ -179,17 +213,55 @@ const ProductCategory = ({ groupCategory, category }) => {
                   <div className="filtered">
                     <div className="filtered-header">
                       <span className="choose">Bạn chọn</span>
-                      <span className="clear-all">Bỏ hết</span>
+                      <span
+                        className="clear-all"
+                        onClick={() =>
+                          setSelectedFilter({
+                            colors: [],
+                            sizes: [],
+                            prices: [],
+                          })
+                        }
+                      >
+                        Bỏ hết
+                      </span>
                     </div>
                     <div className="filtered-container">
                       {selectedFilter.colors.map((item) => {
-                        return <span>{item.color}</span>;
+                        return (
+                          <span
+                            key={item.color}
+                            onClick={() => {
+                              handleDeleteFilter(item.color, "colors");
+                            }}
+                          >
+                            {item.color}
+                          </span>
+                        );
                       })}
                       {selectedFilter.sizes.map((item) => {
-                        return <span>{item}</span>;
+                        return (
+                          <span
+                            key={item}
+                            onClick={() => {
+                              handleDeleteFilter(item, "sizes");
+                            }}
+                          >
+                            {item}
+                          </span>
+                        );
                       })}
                       {selectedFilter.prices.map((item) => {
-                        return <span>{item}</span>;
+                        return (
+                          <span
+                            key={item}
+                            onClick={() => {
+                              handleDeleteFilter(item, "prices");
+                            }}
+                          >
+                            {item}
+                          </span>
+                        );
                       })}
                     </div>
                   </div>
@@ -251,7 +323,7 @@ const ProductCategory = ({ groupCategory, category }) => {
                           );
                         })}
                     </ul>
-                    {colors.length <= 8 ? (
+                    {colors.length <= 8 || toogle.color ? (
                       ""
                     ) : (
                       <span
@@ -331,26 +403,20 @@ const ProductCategory = ({ groupCategory, category }) => {
                         toogle.price ? "hidden" : ""
                       }`}
                     >
-                      <li className="filter-item">
-                        <input type="checkbox" name="" defaultValue="" />
-                        <span>Nhỏ hơn 100.000đ</span>
-                      </li>
-                      <li className="filter-item">
-                        <input type="checkbox" name="" defaultValue="" />
-                        <span>Từ 100.000đ - 300.000đ</span>
-                      </li>
-                      <li className="filter-item">
-                        <input type="checkbox" name="" defaultValue="" />
-                        <span>Từ 300.000đ - 500.000đ</span>
-                      </li>
-                      <li className="filter-item">
-                        <input type="checkbox" name="" defaultValue="" />
-                        <span>Từ 500.000đ - 700.000đ</span>
-                      </li>
-                      <li className="filter-item">
-                        <input type="checkbox" name="" defaultValue="" />
-                        <span>Lớn hơn 700.000đ</span>
-                      </li>
+                      {prices.map((item) => {
+                        return (
+                          <li
+                            key={item.price}
+                            className="filter-item"
+                            onClick={() => {
+                              selectFilter(item.price, "prices");
+                            }}
+                          >
+                            <input type="checkbox" name="" defaultValue="" />
+                            <span>{item.price}</span>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 </div>

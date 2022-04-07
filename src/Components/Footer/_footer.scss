@@ -1,8 +1,15 @@
 @import "../../styles/variable";
+@import "../../styles/responsive";
 
 .sec-footer {
   background: $footer;
   padding: 35px 0 0;
+
+  .container {
+    @include mobile {
+      padding-left: 15px !important;
+    }
+  }
   .footer-item {
     padding-bottom: 20px;
     margin-top: 20px;

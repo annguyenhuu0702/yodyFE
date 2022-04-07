@@ -5,7 +5,7 @@ const Services = ({ col }) => {
     <section className="sec-services">
       <div className="container">
         <div className="services-list row">
-          <div className={`services-content col-lg-${col}`}>
+          <div className={`services-content col-lg-${col} col-6`}>
             <div className="content-left">
               <img
                 src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/ser_1.png?1646575637708"
@@ -19,7 +19,7 @@ const Services = ({ col }) => {
               </p>
             </div>
           </div>
-          <div className={`services-content col-lg-${col}`}>
+          <div className={`services-content col-lg-${col} col-6`}>
             <div className="content-left">
               <img
                 src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/ser_2.png?1646575637708"
@@ -33,7 +33,7 @@ const Services = ({ col }) => {
               </p>
             </div>
           </div>
-          <div className={`services-content col-lg-${col}`}>
+          <div className={`services-content col-lg-${col} col-6`}>
             <div className="content-left">
               <img
                 src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/ser_3.png?1646575637708"
@@ -47,7 +47,7 @@ const Services = ({ col }) => {
               </p>
             </div>
           </div>
-          <div className={`services-content col-lg-${col}`}>
+          <div className={`services-content col-lg-${col} col-6`}>
             <div className="content-left">
               <img
                 src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/ser_4.png?1646575637708"

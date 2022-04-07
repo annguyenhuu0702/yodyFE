@@ -1,15 +1,32 @@
 @import "../../styles/variable";
-@import "../../styles/base";
+@import "../../styles/animation";
+@import "../../styles/responsive";
 
 .header-nav-main {
   display: flex;
   margin-top: 16px;
   padding-left: 0 !important;
   position: relative;
+
+  @include mobile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-right: 0 !important;
+  }
+
+  @include tablet {
+    margin-bottom: 10px;
+  }
+
   .logo {
     display: flex;
     align-items: center;
     margin-right: 40px;
+
+    @include mobile {
+      margin: 0 0 0 10px;
+    }
     img {
       border: 0 none;
     }
@@ -18,12 +35,22 @@
   .header-nav {
     display: flex;
     align-items: center;
+
+    @include mobile {
+      display: none;
+    }
+
+    @include tablet {
+      display: none;
+    }
+
     .header-menu {
       display: flex;
       list-style: none;
       padding-left: 0;
       margin-bottom: 0;
       height: 100%;
+
       .category {
         font-size: 1.6rem;
         margin-right: 20px;
@@ -116,6 +143,15 @@
     width: 250px;
     position: relative;
     margin-left: 16px;
+
+    @include mobile {
+      width: 200px;
+    }
+
+    @include tablet {
+      min-width: 500px;
+    }
+
     .search-text {
       font-size: 1.4rem;
       min-height: 38px;
@@ -144,9 +180,25 @@
     display: flex;
     align-items: center;
     margin-left: 60px;
+
+    @include mobile {
+      margin-left: 0;
+    }
+
+    @include tablet {
+      margin-left: 30px;
+    }
     .auth {
       position: relative;
       margin-right: 30px;
+
+      @include mobile {
+        display: none;
+      }
+
+      @include tablet {
+        display: none;
+      }
 
       &:hover .header-account {
         display: block;
@@ -226,6 +278,10 @@
     }
     .cart {
       position: relative;
+      @include mobile {
+        margin-left: 10px;
+      }
+
       &:hover .cart-content {
         display: block;
         @include animation(cart, 0.3s, ease-in, 1);
@@ -273,6 +329,28 @@
               color: $yellow;
             }
           }
+        }
+      }
+    }
+
+    .bars {
+      @include desktop {
+        display: none;
+      }
+
+      @include mobile {
+        margin-left: 16px;
+        i {
+          font-size: 2.2rem;
+          color: $black;
+        }
+      }
+
+      @include tablet {
+        margin-left: 16px;
+        i {
+          font-size: 2.2rem;
+          color: $black;
         }
       }
     }

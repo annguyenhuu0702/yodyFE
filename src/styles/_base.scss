@@ -7,14 +7,21 @@ html {
   line-height: 1.6rem;
   font-family: "Roboto", sans-serif;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
-@mixin animation($name, $duration, $type, $time) {
-  animation: $name $duration $type $time;
+a:hover {
+  text-decoration: none;
 }
 
-@mixin keyframes($name) {
-  @keyframes #{$name} {
-    @content;
-  }
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #7a7a9d;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-track {
+  background: #dde1ef;
+  border-radius: 3px;
 }

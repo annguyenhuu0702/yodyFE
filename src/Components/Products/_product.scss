@@ -1,47 +1,64 @@
 @import "../../styles/variable";
+@import "../../styles/responsive";
 
-.product-item {
-  max-width: 20% !important;
-  padding: 0 10px !important;
-  margin-bottom: 10px;
-  .item-img {
-    overflow: hidden;
-    a {
-      display: block;
-      position: relative;
-      background: #f2f2f2;
-      transition: all 0.8s;
-      &:hover {
-        transform: scale(1.1);
-      }
+.product {
+  .container {
+    @include mobile {
+      padding-left: 15px !important;
     }
-  }
+    .product-item {
+      max-width: 20% !important;
+      padding: 0 10px !important;
+      margin-bottom: 10px;
 
-  .product-info {
-    margin-top: 8px;
-    .name {
-      height: 42px;
-      a {
-        color: $black;
-        font-size: 1.4rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+      @include mobile {
+        max-width: 50% !important;
+      }
+
+      @include tablet {
+        max-width: 33% !important;
+      }
+
+      .item-img {
         overflow: hidden;
-        &:hover {
-          color: $yellow;
-          text-decoration: none;
+        a {
+          display: block;
+          position: relative;
+          background: #f2f2f2;
+          transition: all 0.8s;
+          &:hover {
+            transform: scale(1.1);
+          }
         }
       }
-    }
 
-    .price {
-      font-size: 1.4rem;
-      margin-top: 4px;
-      .current {
-        color: $yellow;
-        margin-right: 16px;
-        font-weight: 500;
+      .product-info {
+        margin-top: 8px;
+        .name {
+          height: 42px;
+          a {
+            color: $black;
+            font-size: 1.4rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            &:hover {
+              color: $yellow;
+              text-decoration: none;
+            }
+          }
+        }
+
+        .price {
+          font-size: 1.4rem;
+          margin-top: 4px;
+          .current {
+            color: $yellow;
+            margin-right: 16px;
+            font-weight: 500;
+          }
+        }
       }
     }
   }

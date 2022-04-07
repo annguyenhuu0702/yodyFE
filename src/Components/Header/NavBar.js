@@ -148,6 +148,9 @@ const NavBar = () => {
             </div>
           </div>
         </div>
+        <div className="bars">
+          <i className="fa-solid fa-bars"></i>
+        </div>
       </div>
     </section>
   );

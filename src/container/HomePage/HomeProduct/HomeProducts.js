@@ -39,13 +39,15 @@ const HomeProducts = () => {
     });
   };
 
-  const getProductsByBuyertype = (item, index) => {
-    apiGetAllProductByCategorySlug(dispatch, item.slug);
+  const getProductsByBuyertype = async (item, index) => {
+    await apiGetAllProductByCategorySlug(dispatch, item.slug);
+    dispatch(sortProduct());
     setInxCategory(index + 1);
   };
 
-  const getAllProduct = () => {
-    apiGetAllProduct(dispatch);
+  const getAllProduct = async () => {
+    await apiGetAllProduct(dispatch);
+    dispatch(sortProduct());
     setInxCategory(0);
   };
 

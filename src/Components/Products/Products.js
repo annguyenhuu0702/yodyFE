@@ -12,7 +12,7 @@ const Products = (props) => {
       <div className="row">
         {products.slice(0, visible)?.map((item) => {
           return (
-            <div className="col-lg-3 product-item" key={item.id}>
+            <div className="col-lg-3 col-md-4 col-6 product-item" key={item.id}>
               <div className="item-img">
                 <Link to={`/${item.slug}`}>
                   <img
