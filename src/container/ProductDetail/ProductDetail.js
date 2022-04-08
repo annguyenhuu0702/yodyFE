@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./_productdetail.scss";
 import { URL } from "../../constants/index";
 import { castToVND, convertSizeStringToNumber } from "../../Common";
@@ -19,6 +19,8 @@ const ProductDetail = () => {
   const [product, setProduct] = useState();
 
   const params = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIndexImage(0);
@@ -237,6 +239,7 @@ const ProductDetail = () => {
                           product.productColors[indexColor].sizes[indexSize].id,
                         quantity: qtt,
                       });
+                      navigate("/cart");
                     }}
                   >
                     Muan ngay

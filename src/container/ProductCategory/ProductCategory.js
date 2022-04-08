@@ -463,7 +463,9 @@ const ProductCategory = ({ groupCategory, category }) => {
                   </div>
                 </div>
               </div>
-              <Products products={products} />
+              <div className="product">
+                <Products products={products} />
+              </div>
             </div>
           </div>
         </div>

@@ -10,6 +10,7 @@ import ProductCategory from "./container/ProductCategory/ProductCategory";
 import ProductPage from "./container/ProductPage/ProductPage";
 import Register from "./container/Register/Register";
 import ProductDetail from "./container/ProductDetail/ProductDetail";
+import CartDetail from "./container/CartDetail/CartDetail";
 
 const PageRoutes = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const PageRoutes = () => {
       <Route path="/account/login" element={<Login />} />
       <Route path="/account/register" element={<Register />} />
       <Route path="/:productDetail" element={<ProductDetail />} />
+      <Route path="/cart" element={<CartDetail />} />
       {buyertypes.map((item) => {
         return (
           <Route

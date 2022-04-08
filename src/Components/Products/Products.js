@@ -24,7 +24,9 @@ const Products = (props) => {
               </div>
               <div className="product-info">
                 <div className="name">
-                  <Link to={`/${item.slug}`}>{item.name}</Link>
+                  <Link to={`/${item.slug}`} className="link-name">
+                    {item.name}
+                  </Link>
                 </div>
                 <div className="price">
                   <span className="current">{castToVND(item.newPrice)}</span>
