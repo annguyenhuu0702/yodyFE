@@ -1,27 +1,31 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { apiGetCartByUser } from "../../api/apiCart";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import "./_cartdetail.scss";
+import { castToVND } from "../../Common/index";
+import { URL } from "../../constants/index";
 
 const CartDetail = () => {
-  const user = useSelector((state) => state.auth.login.currentUser);
   const carts = useSelector((state) => state.cart.carts);
-  console.log(carts);
-  const dispatch = useDispatch();
-  console.log(user);
 
-  useEffect(() => {
-    apiGetCartByUser(user, dispatch);
-  }, [dispatch, user]);
+  const handleQtt = () => {};
+
+  const totalPrice = () => {
+    let total = 0;
+    for (let i = 0; i < carts.length; i++) {
+      total += carts[i].product.newPrice * carts[i].quantity;
+    }
+    return total;
+  };
   return (
     <div className="cart-detail">
       <div className="container">
         <div className="row">
-          <div className="cart-left col-lg-8">
+          <div className="cart-left col-lg-8 col-8">
             <div className="cart-title">
               <div>
                 <b>Đơn hàng của bạn</b>
-                <span className="total-cart"> (1) sản phẩm</span>
+                <span className="total-cart"> ({carts.length}) sản phẩm</span>
               </div>
               <span className="collection-all">
                 <a href=" ">
@@ -36,45 +40,72 @@ const CartDetail = () => {
               <div>Thành tiền</div>
             </div>
             <div className="item-wrapper">
-              <div className="cart-item">
-                <div className="item-img">
-                  <a href=" ">
-                    <img
-                      src="https://bizweb.dktcdn.net/thumb/compact/100/438/408/products/apm3635-gre-2.jpg"
-                      alt=""
-                    />
-                  </a>
-                </div>
-                <div className="item-info">
-                  <div className="product-wrap-name">
-                    <a href=" " className="info-name">
-                      Áo polo nam cafe phối nẹp thấm hút mồ hôi
-                    </a>
-                    <span className="info-color-size">Grey / M</span>
-                    <p className="remove-cart">
-                      <i className="fa-solid fa-trash-can"></i>
-                      Xóa
-                    </p>
-                  </div>
-
-                  <div className="cart-price">299.000đ</div>
-                  <div className="cart-qtt">
-                    <div className="quantity">
-                      <button type="button" className="btn-qtt minus">
-                        <i className="fa-solid fa-minus"></i>
-                      </button>
-                      <input className="form-control" />
-                      <button type="button" className="btn-qtt plus">
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
+              {carts.map((item) => {
+                console.log(item);
+                return (
+                  <div className="cart-item" key={item.id}>
+                    <div className="info-left">
+                      <Link to={`/${item.product.slug}`} className="item-img">
+                        <img
+                          src={`${URL}${item.product.images[0].image}`}
+                          alt=" "
+                        />
+                      </Link>
+                      <div className="product-wrap-name">
+                        <div className="wrap-name-color">
+                          <Link
+                            to={`/${item.product.slug}`}
+                            className="info-name"
+                          >
+                            {item.product.name}
+                          </Link>
+                          <span className="info-color-size">
+                            {item.product.color} / {item.size.size}
+                          </span>
+                        </div>
+                        <p className="remove-cart">
+                          <i className="fa-solid fa-trash-can"></i>
+                          Xóa
+                        </p>
+                      </div>
+                    </div>
+                    <div className="info-right cart-price">
+                      {castToVND(item.product.newPrice)}
+                    </div>
+                    <div className="info-right cart-qtt">
+                      <div className="quantity">
+                        <button type="button" className="btn-qtt minus">
+                          <i className="fa-solid fa-minus"></i>
+                        </button>
+                        <input
+                          className="form-control"
+                          value={item.quantity}
+                          onChange={() => handleQtt()}
+                        />
+                        <button type="button" className="btn-qtt plus">
+                          <i className="fa-solid fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="info-right cart-total-price">
+                      {castToVND(item.quantity * item.product.newPrice)}
                     </div>
                   </div>
-                  <div className="cart-total-price">299.999đ</div>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
-          <div className="cart-right col-lg-4">abc</div>
+          <div className="cart-right col-lg-4 col-4">
+            <div className="cart-tile">
+              <span className="subs">Tổng cộng: </span>
+              <span className="total-price">{castToVND(totalPrice())}</span>
+            </div>
+            <div className="payment">
+              <button className="btn-payment">
+                Thanh toán ({carts.length})
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

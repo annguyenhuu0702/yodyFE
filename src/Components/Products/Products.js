@@ -17,7 +17,7 @@ const Products = (props) => {
                 <Link to={`/${item.slug}`}>
                   <img
                     className="w-100"
-                    src={`${URL}/${item.productColors[0].images[0]?.image}`}
+                    src={`${URL}${item.productColors[0].images[0]?.image}`}
                     alt=""
                   />
                 </Link>

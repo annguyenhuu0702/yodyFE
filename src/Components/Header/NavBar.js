@@ -5,6 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../../api/apiAuth";
 import { apiGetAllBuyerType } from "../../api/apiBuyerType";
+import { URL } from "../../constants";
+import { castToVND } from "../../Common";
+import { apiGetCartByUser } from "../../api/apiCart";
 
 const NavBar = () => {
   const category = [
@@ -27,6 +30,24 @@ const NavBar = () => {
   useEffect(() => {
     apiGetAllBuyerType(dispatch);
   }, [dispatch]);
+
+  useEffect(() => {
+    apiGetCartByUser(user, dispatch);
+  }, [dispatch, user]);
+
+  const carts = useSelector((state) => state.cart.carts);
+  console.log(carts);
+
+  const subTotal = () => {
+    let total = 0;
+    for (let i = 0; i < carts.length; i++) {
+      total += carts[i].product.newPrice * carts[i].quantity;
+    }
+    return total;
+  };
+
+  const handleQtt = () => {};
+
   return (
     <section className="header-nav-main container">
       <Link to="/" className="logo">
@@ -128,24 +149,108 @@ const NavBar = () => {
           )}
         </div>
         <div className="cart">
-          <a href=" ">
+          <Link to="/cart">
             <img
               src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/cart.svg?1646575637708"
               alt=""
             />
-          </a>
-          <div className="cart-content">
-            <div className="cart-item">
-              <img
-                src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/blank_cart.svg?1646575637708"
-                alt=""
-                className="cart-img"
-              />
-              <p className="cart-message">Giỏ hàng của bạn đang trống</p>
-              <Link to="/account/login" className="login-cart">
-                Đăng nhập/Đăng kí
+          </Link>
+          {carts.length > 0 && user ? (
+            <div className="cart-length">
+              <Link to={`/cart`}>
+                <span>{carts.length}</span>
               </Link>
             </div>
+          ) : (
+            ""
+          )}
+          <div className="cart-content">
+            {carts.length > 0 && user ? (
+              <div className="cart-container">
+                <div className="cart-top"></div>
+                <div className="cart-item">
+                  {carts.map((item) => {
+                    return (
+                      <div className="cart-main" key={item.id}>
+                        <div className="img">
+                          <Link to={`/${item.product.slug}`}>
+                            <img
+                              src={`${URL}${item.product.images[0].image}`}
+                              alt=""
+                            />
+                          </Link>
+                        </div>
+                        <div className="cart-info">
+                          <div className="info name">
+                            <Link to={`/${item.product.slug}`}>
+                              {item.product.name}
+                            </Link>
+                            <i className="fa-solid fa-trash-can"></i>
+                          </div>
+                          <span className="info price">
+                            {castToVND(item.product.newPrice)}
+                          </span>
+                          <span className="info color-size">
+                            {item.product.color} / {item.size.size}
+                          </span>
+                          <div className="info qtt">
+                            <div className="cart-qtt">
+                              <div className="quantity">
+                                <button type="button" className="btn-qtt minus">
+                                  <i className="fa-solid fa-minus"></i>
+                                </button>
+                                <input
+                                  className="form-control"
+                                  value={item.quantity}
+                                  onChange={() => handleQtt()}
+                                />
+                                <button type="button" className="btn-qtt plus">
+                                  <i className="fa-solid fa-plus"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <div className="total-price">
+                              <span>Tổng cộng</span>
+                              <span>
+                                {castToVND(
+                                  item.product.newPrice * item.quantity
+                                )}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="subs-total">
+                  <span>Tổng cộng: </span>
+                  <span>{castToVND(subTotal())}</span>
+                </div>
+                <div className="payment">
+                  <button
+                    className="btn-payment"
+                    onClick={() => {
+                      navigate("/cart");
+                    }}
+                  >
+                    Mua ngay
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="cart-no-item">
+                <img
+                  src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/blank_cart.svg?1646575637708"
+                  alt=""
+                  className="cart-img"
+                />
+                <p className="cart-message">Giỏ hàng của bạn đang trống</p>
+                <Link to="/account/login" className="login-cart">
+                  Đăng nhập/Đăng kí
+                </Link>
+              </div>
+            )}
           </div>
         </div>
         <div className="bars">
