@@ -38,6 +38,8 @@ const ProductDetail = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.login.currentUser);
+  // const message = useSelector((state) => state.cart.message);
+  // const carts = useSelector((state) => state.cart.carts);
 
   const addToCart = (data) => {
     apiAddToCart(user, dispatch, data);
@@ -224,6 +226,9 @@ const ProductDetail = () => {
                         sizeId:
                           product.productColors[indexColor].sizes[indexSize].id,
                         quantity: qtt,
+                        amount:
+                          product.productColors[indexColor].sizes[indexSize]
+                            .amount,
                       });
                     }}
                   >
@@ -238,6 +243,9 @@ const ProductDetail = () => {
                         sizeId:
                           product.productColors[indexColor].sizes[indexSize].id,
                         quantity: qtt,
+                        amount:
+                          product.productColors[indexColor].sizes[indexSize]
+                            .amount,
                       });
                       navigate("/cart");
                     }}

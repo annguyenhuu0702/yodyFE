@@ -1,14 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "./_cartdetail.scss";
 import { castToVND } from "../../Common/index";
 import { URL } from "../../constants/index";
+import { apiDeleteCart, apiUpdateCart } from "../../api/apiCart";
 
 const CartDetail = () => {
   const carts = useSelector((state) => state.cart.carts);
-
-  const handleQtt = () => {};
+  const user = useSelector((state) => state.auth.login.currentUser);
+  const dispatch = useDispatch();
 
   const totalPrice = () => {
     let total = 0;
@@ -17,6 +18,20 @@ const CartDetail = () => {
     }
     return total;
   };
+
+  const updateCart = (newQuantity, item) => {
+    if (newQuantity > -1 && newQuantity <= item.size.amount) {
+      apiUpdateCart(user, dispatch, {
+        sizeId: item.sizeId,
+        quantity: newQuantity,
+      });
+    }
+  };
+
+  const handleDeleteCart = (id) => {
+    apiDeleteCart(user, dispatch, id);
+  };
+
   return (
     <div className="cart-detail">
       <div className="container">
@@ -41,7 +56,6 @@ const CartDetail = () => {
             </div>
             <div className="item-wrapper">
               {carts.map((item) => {
-                console.log(item);
                 return (
                   <div className="cart-item" key={item.id}>
                     <div className="info-left">
@@ -63,10 +77,17 @@ const CartDetail = () => {
                             {item.product.color} / {item.size.size}
                           </span>
                         </div>
-                        <p className="remove-cart">
-                          <i className="fa-solid fa-trash-can"></i>
-                          Xóa
-                        </p>
+                        <div className="remove-cart">
+                          <button
+                            className="btn-remove"
+                            onClick={() => {
+                              handleDeleteCart(item.id);
+                            }}
+                          >
+                            <i className="fa-solid fa-trash-can"></i>
+                            Xóa
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <div className="info-right cart-price">
@@ -74,15 +95,29 @@ const CartDetail = () => {
                     </div>
                     <div className="info-right cart-qtt">
                       <div className="quantity">
-                        <button type="button" className="btn-qtt minus">
+                        <button
+                          type="button"
+                          className="btn-qtt minus"
+                          onClick={() => {
+                            updateCart(item.quantity - 1, item);
+                          }}
+                        >
                           <i className="fa-solid fa-minus"></i>
                         </button>
                         <input
                           className="form-control"
                           value={item.quantity}
-                          onChange={() => handleQtt()}
+                          onChange={(e) => {
+                            updateCart(parseInt(e.target.value), item);
+                          }}
                         />
-                        <button type="button" className="btn-qtt plus">
+                        <button
+                          type="button"
+                          className="btn-qtt plus"
+                          onClick={() => {
+                            updateCart(item.quantity + 1, item);
+                          }}
+                        >
                           <i className="fa-solid fa-plus"></i>
                         </button>
                       </div>

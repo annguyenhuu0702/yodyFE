@@ -7,7 +7,11 @@ import { logOut } from "../../api/apiAuth";
 import { apiGetAllBuyerType } from "../../api/apiBuyerType";
 import { URL } from "../../constants";
 import { castToVND } from "../../Common";
-import { apiGetCartByUser } from "../../api/apiCart";
+import {
+  apiDeleteCart,
+  apiGetCartByUser,
+  apiUpdateCart,
+} from "../../api/apiCart";
 
 const NavBar = () => {
   const category = [
@@ -36,7 +40,6 @@ const NavBar = () => {
   }, [dispatch, user]);
 
   const carts = useSelector((state) => state.cart.carts);
-  console.log(carts);
 
   const subTotal = () => {
     let total = 0;
@@ -46,7 +49,18 @@ const NavBar = () => {
     return total;
   };
 
-  const handleQtt = () => {};
+  const handleDeleteCart = (id) => {
+    apiDeleteCart(user, dispatch, id);
+  };
+
+  const updateCart = (newQuantity, item) => {
+    if (newQuantity > -1 && newQuantity <= item.size.amount) {
+      apiUpdateCart(user, dispatch, {
+        sizeId: item.sizeId,
+        quantity: newQuantity,
+      });
+    }
+  };
 
   return (
     <section className="header-nav-main container">
@@ -185,7 +199,12 @@ const NavBar = () => {
                             <Link to={`/${item.product.slug}`}>
                               {item.product.name}
                             </Link>
-                            <i className="fa-solid fa-trash-can"></i>
+                            <i
+                              className="fa-solid fa-trash-can"
+                              onClick={() => {
+                                handleDeleteCart(item.id);
+                              }}
+                            ></i>
                           </div>
                           <span className="info price">
                             {castToVND(item.product.newPrice)}
@@ -196,15 +215,27 @@ const NavBar = () => {
                           <div className="info qtt">
                             <div className="cart-qtt">
                               <div className="quantity">
-                                <button type="button" className="btn-qtt minus">
+                                <button
+                                  type="button"
+                                  className="btn-qtt minus"
+                                  onClick={() => {
+                                    updateCart(item.quantity - 1, item);
+                                  }}
+                                >
                                   <i className="fa-solid fa-minus"></i>
                                 </button>
                                 <input
                                   className="form-control"
                                   value={item.quantity}
-                                  onChange={() => handleQtt()}
+                                  onChange={(e) => updateCart(e.target.value)}
                                 />
-                                <button type="button" className="btn-qtt plus">
+                                <button
+                                  type="button"
+                                  className="btn-qtt plus"
+                                  onClick={() => {
+                                    updateCart(item.quantity + 1, item);
+                                  }}
+                                >
                                   <i className="fa-solid fa-plus"></i>
                                 </button>
                               </div>
@@ -246,9 +277,13 @@ const NavBar = () => {
                   className="cart-img"
                 />
                 <p className="cart-message">Giỏ hàng của bạn đang trống</p>
-                <Link to="/account/login" className="login-cart">
-                  Đăng nhập/Đăng kí
-                </Link>
+                {!user ? (
+                  <Link to="/account/login" className="login-cart">
+                    Đăng nhập/Đăng kí
+                  </Link>
+                ) : (
+                  ""
+                )}
               </div>
             )}
           </div>
