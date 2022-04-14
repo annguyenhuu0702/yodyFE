@@ -5,7 +5,6 @@ import {
   getCartByUser,
   updateCart,
   deleteCart,
-  showMessage,
 } from "../Redux/cartSlice";
 
 export const apiAddToCart = async (user, dispatch, data) => {
@@ -13,8 +12,6 @@ export const apiAddToCart = async (user, dispatch, data) => {
     const res = await configAxios(user, dispatch).post(`${URL}/v1/cart`, data);
     if (res.data) {
       dispatch(addToCart(res.data));
-    } else {
-      dispatch(showMessage("Số lượng tồn không đủ!"));
     }
   } catch (err) {
     console.log(err);

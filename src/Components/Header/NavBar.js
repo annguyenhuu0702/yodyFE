@@ -12,6 +12,10 @@ import {
   apiGetCartByUser,
   apiUpdateCart,
 } from "../../api/apiCart";
+import {
+  deleteCartLocalStore,
+  updateCartLocalStorage,
+} from "../../Redux/cartSlice";
 
 const NavBar = () => {
   const category = [
@@ -23,6 +27,9 @@ const NavBar = () => {
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const buyerType = useSelector((state) => state.buyertype.buyertypes);
+  const carts = useSelector((state) => state.cart.carts);
+
+  const cartsLocal = useSelector((state) => state.cart.cartsLocal);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,29 +43,45 @@ const NavBar = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    apiGetCartByUser(user, dispatch);
+    if (user) {
+      apiGetCartByUser(user, dispatch);
+    }
   }, [dispatch, user]);
-
-  const carts = useSelector((state) => state.cart.carts);
 
   const subTotal = () => {
     let total = 0;
-    for (let i = 0; i < carts.length; i++) {
-      total += carts[i].product.newPrice * carts[i].quantity;
+    if (user) {
+      for (let i = 0; i < carts.length; i++) {
+        total += carts[i].product.newPrice * carts[i].quantity;
+      }
+    } else {
+      for (let i = 0; i < cartsLocal.length; i++) {
+        total += cartsLocal[i].newPrice * cartsLocal[i].quantity;
+      }
     }
     return total;
   };
 
-  const handleDeleteCart = (id) => {
-    apiDeleteCart(user, dispatch, id);
+  const updateCart = (newQuantity, item) => {
+    if (user) {
+      if (newQuantity > -1 && newQuantity <= item.size.amount) {
+        apiUpdateCart(user, dispatch, {
+          sizeId: item.sizeId,
+          quantity: newQuantity,
+        });
+      }
+    } else {
+      if (newQuantity > -1 && newQuantity <= item.amount) {
+        dispatch(updateCartLocalStorage({ ...item, newQuantity }));
+      }
+    }
   };
 
-  const updateCart = (newQuantity, item) => {
-    if (newQuantity > -1 && newQuantity <= item.size.amount) {
-      apiUpdateCart(user, dispatch, {
-        sizeId: item.sizeId,
-        quantity: newQuantity,
-      });
+  const handleDeleteCart = (item) => {
+    if (user) {
+      apiDeleteCart(user, dispatch, item.id);
+    } else {
+      dispatch(deleteCartLocalStore(item));
     }
   };
 
@@ -169,124 +192,236 @@ const NavBar = () => {
               alt=""
             />
           </Link>
-          {carts.length > 0 && user ? (
+          {(user ? carts : cartsLocal).length > 0 ? (
             <div className="cart-length">
               <Link to={`/cart`}>
-                <span>{carts.length}</span>
+                {user ? (
+                  <span>{carts.length}</span>
+                ) : (
+                  <span>{cartsLocal.length}</span>
+                )}
               </Link>
             </div>
           ) : (
             ""
           )}
-          <div className="cart-content">
-            {carts.length > 0 && user ? (
-              <div className="cart-container">
-                <div className="cart-top"></div>
-                <div className="cart-item">
-                  {carts.map((item) => {
-                    return (
-                      <div className="cart-main" key={item.id}>
-                        <div className="img">
-                          <Link to={`/${item.product.slug}`}>
-                            <img
-                              src={`${URL}${item.product.images[0].image}`}
-                              alt=""
-                            />
-                          </Link>
-                        </div>
-                        <div className="cart-info">
-                          <div className="info name">
+          {user ? (
+            <div className="cart-content">
+              {carts.length > 0 ? (
+                <div className="cart-container">
+                  <div className="cart-top"></div>
+                  <div className="cart-item">
+                    {carts.map((item) => {
+                      return (
+                        <div className="cart-main" key={item.id}>
+                          <div className="img">
                             <Link to={`/${item.product.slug}`}>
-                              {item.product.name}
+                              <img
+                                src={`${URL}${item.product.images[0].image}`}
+                                alt=""
+                              />
                             </Link>
-                            <i
-                              className="fa-solid fa-trash-can"
-                              onClick={() => {
-                                handleDeleteCart(item.id);
-                              }}
-                            ></i>
                           </div>
-                          <span className="info price">
-                            {castToVND(item.product.newPrice)}
-                          </span>
-                          <span className="info color-size">
-                            {item.product.color} / {item.size.size}
-                          </span>
-                          <div className="info qtt">
-                            <div className="cart-qtt">
-                              <div className="quantity">
-                                <button
-                                  type="button"
-                                  className="btn-qtt minus"
-                                  onClick={() => {
-                                    updateCart(item.quantity - 1, item);
-                                  }}
-                                >
-                                  <i className="fa-solid fa-minus"></i>
-                                </button>
-                                <input
-                                  className="form-control"
-                                  value={item.quantity}
-                                  onChange={(e) => updateCart(e.target.value)}
-                                />
-                                <button
-                                  type="button"
-                                  className="btn-qtt plus"
-                                  onClick={() => {
-                                    updateCart(item.quantity + 1, item);
-                                  }}
-                                >
-                                  <i className="fa-solid fa-plus"></i>
-                                </button>
+                          <div className="cart-info">
+                            <div className="info name">
+                              <Link to={`/${item.product.slug}`}>
+                                {item.product.name}
+                              </Link>
+                              <i
+                                className="fa-solid fa-trash-can"
+                                onClick={() => {
+                                  handleDeleteCart(item);
+                                }}
+                              ></i>
+                            </div>
+                            <span className="info price">
+                              {castToVND(item.product.newPrice)}
+                            </span>
+                            <span className="info color-size">
+                              {item.product.color} / {item.size.size}
+                            </span>
+                            <div className="info qtt">
+                              <div className="cart-qtt">
+                                <div className="quantity">
+                                  <button
+                                    type="button"
+                                    className="btn-qtt minus"
+                                    onClick={() => {
+                                      updateCart(item.quantity - 1, item);
+                                    }}
+                                  >
+                                    <i className="fa-solid fa-minus"></i>
+                                  </button>
+                                  <input
+                                    className="form-control"
+                                    value={item.quantity}
+                                    onChange={(e) => updateCart(e.target.value)}
+                                  />
+                                  <button
+                                    type="button"
+                                    className="btn-qtt plus"
+                                    onClick={() => {
+                                      updateCart(item.quantity + 1, item);
+                                    }}
+                                  >
+                                    <i className="fa-solid fa-plus"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="total-price">
+                                <span>Tổng cộng</span>
+                                <span>
+                                  {castToVND(
+                                    item.product.newPrice * item.quantity
+                                  )}
+                                </span>
                               </div>
                             </div>
-                            <div className="total-price">
-                              <span>Tổng cộng</span>
-                              <span>
-                                {castToVND(
-                                  item.product.newPrice * item.quantity
-                                )}
-                              </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="subs-total">
+                    <span>Tổng cộng: </span>
+                    <span>{castToVND(subTotal())}</span>
+                  </div>
+                  <div className="payment">
+                    <button
+                      className="btn-payment"
+                      onClick={() => {
+                        navigate("/cart");
+                      }}
+                    >
+                      Mua ngay
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="cart-no-item">
+                  <img
+                    src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/blank_cart.svg?1646575637708"
+                    alt=""
+                    className="cart-img"
+                  />
+                  <p className="cart-message">Giỏ hàng của bạn đang trống</p>
+                  {!user ? (
+                    <Link to="/account/login" className="login-cart">
+                      Đăng nhập/Đăng kí
+                    </Link>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="cart-content">
+              {cartsLocal.length > 0 ? (
+                <div className="cart-container">
+                  <div className="cart-top"></div>
+                  <div className="cart-item">
+                    {cartsLocal.map((item) => {
+                      return (
+                        <div className="cart-main" key={item.id}>
+                          <div className="img">
+                            <Link to={`/${item.slug}`}>
+                              <img
+                                src={`${URL}${item.images[0].image}`}
+                                alt=""
+                              />
+                            </Link>
+                          </div>
+                          <div className="cart-info">
+                            <div className="info name">
+                              <Link to={`/${item.slug}`}>{item.name}</Link>
+                              <i
+                                className="fa-solid fa-trash-can"
+                                onClick={() => {
+                                  handleDeleteCart(item);
+                                }}
+                              ></i>
+                            </div>
+                            <span className="info price">
+                              {castToVND(item.newPrice)}
+                            </span>
+                            <span className="info color-size">
+                              {item.color} / {item.size}
+                            </span>
+                            <div className="info qtt">
+                              <div className="cart-qtt">
+                                <div className="quantity">
+                                  <button
+                                    type="button"
+                                    className="btn-qtt minus"
+                                    onClick={() => {
+                                      updateCart(item.quantity - 1, item);
+                                    }}
+                                  >
+                                    <i className="fa-solid fa-minus"></i>
+                                  </button>
+                                  <input
+                                    className="form-control"
+                                    value={item.quantity}
+                                    onChange={(e) => updateCart(e.target.value)}
+                                  />
+                                  <button
+                                    type="button"
+                                    className="btn-qtt plus"
+                                    onClick={() => {
+                                      updateCart(item.quantity + 1, item);
+                                    }}
+                                  >
+                                    <i className="fa-solid fa-plus"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="total-price">
+                                <span>Tổng cộng</span>
+                                <span>
+                                  {castToVND(item.newPrice * item.quantity)}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
+                  <div className="subs-total">
+                    <span>Tổng cộng: </span>
+                    <span>{castToVND(subTotal())}</span>
+                  </div>
+                  <div className="payment">
+                    <button
+                      className="btn-payment"
+                      onClick={() => {
+                        navigate("/cart");
+                      }}
+                    >
+                      Mua ngay
+                    </button>
+                  </div>
                 </div>
-                <div className="subs-total">
-                  <span>Tổng cộng: </span>
-                  <span>{castToVND(subTotal())}</span>
+              ) : (
+                <div className="cart-no-item">
+                  <img
+                    src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/blank_cart.svg?1646575637708"
+                    alt=""
+                    className="cart-img"
+                  />
+                  <p className="cart-message">Giỏ hàng của bạn đang trống</p>
+                  {!user ? (
+                    <Link to="/account/login" className="login-cart">
+                      Đăng nhập/Đăng kí
+                    </Link>
+                  ) : (
+                    ""
+                  )}
                 </div>
-                <div className="payment">
-                  <button
-                    className="btn-payment"
-                    onClick={() => {
-                      navigate("/cart");
-                    }}
-                  >
-                    Mua ngay
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="cart-no-item">
-                <img
-                  src="https://bizweb.dktcdn.net/100/438/408/themes/848101/assets/blank_cart.svg?1646575637708"
-                  alt=""
-                  className="cart-img"
-                />
-                <p className="cart-message">Giỏ hàng của bạn đang trống</p>
-                {!user ? (
-                  <Link to="/account/login" className="login-cart">
-                    Đăng nhập/Đăng kí
-                  </Link>
-                ) : (
-                  ""
-                )}
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
         <div className="bars">
           <i className="fa-solid fa-bars"></i>

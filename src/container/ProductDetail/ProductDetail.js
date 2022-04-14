@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import ChangePageTitle from "../../Components/ChangePageTitle/ChangePageTitle";
 import { apiProductBySlug } from "../../api/apiProduct";
 import Services from "../../Components/Services/Services";
+import { addToCartLocalStorage, showMessage } from "../../Redux/cartSlice";
 
 const ProductDetail = () => {
   const [indexColor, setIndexColor] = useState(0);
@@ -22,27 +23,102 @@ const ProductDetail = () => {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
+  const message = useSelector((state) => state.cart.message);
+
+  const user = useSelector((state) => state.auth.login.currentUser);
+
+  const cartsLocal = useSelector((state) => state.cart.cartsLocal);
+  const carts = useSelector((state) => state.cart.carts);
+
   useEffect(() => {
     setIndexImage(0);
   }, [indexColor]);
 
   useEffect(() => {
     const api = async () => {
-      const data = await apiProductBySlug(params.productDetail);
-      setProduct(data);
+      let data = await apiProductBySlug(params.productDetail);
+      if (data) {
+        for (let i = 0; i < data.productColors.length; i++) {
+          data.productColors[i].sizes = data.productColors[i].sizes.sort(
+            (a, b) =>
+              convertSizeStringToNumber(a.size) -
+              convertSizeStringToNumber(b.size)
+          );
+        }
+        setProduct(data);
+      }
     };
     api();
   }, [params.productDetail]);
 
+  useEffect(() => {
+    const checkCart = (user ? carts : cartsLocal).find(
+      (item) =>
+        item.sizeId === product?.productColors[indexColor].sizes[indexSize].id
+    );
+    const currentQtt = checkCart ? checkCart.quantity : 0;
+
+    if (
+      product &&
+      qtt + currentQtt ===
+        product.productColors[indexColor].sizes[indexSize].amount + 1
+    ) {
+      dispatch(showMessage("Số lượng tồn không đủ!"));
+    } else if (
+      product &&
+      qtt + currentQtt <=
+        product.productColors[indexColor].sizes[indexSize].amount
+    ) {
+      dispatch(showMessage(""));
+    }
+  }, [
+    dispatch,
+    product,
+    indexColor,
+    indexSize,
+    qtt,
+    message,
+    cartsLocal,
+    user,
+    carts,
+  ]);
+
   const handleQtt = () => {};
 
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.login.currentUser);
-  // const message = useSelector((state) => state.cart.message);
-  // const carts = useSelector((state) => state.cart.carts);
-
   const addToCart = (data) => {
-    apiAddToCart(user, dispatch, data);
+    const checkCart = (user ? carts : cartsLocal).find(
+      (item) =>
+        item.sizeId === product?.productColors[indexColor].sizes[indexSize].id
+    );
+    const currentQtt = checkCart ? checkCart.quantity : 0;
+    if (user) {
+      if (
+        data.quantity + currentQtt <=
+        product.productColors[indexColor].sizes[indexSize].amount
+      ) {
+        apiAddToCart(user, dispatch, data);
+      } else {
+        dispatch(showMessage("Số lượng tồn không đủ!"));
+      }
+    } else {
+      if (
+        data.quantity + currentQtt <=
+        product.productColors[indexColor].sizes[indexSize].amount
+      ) {
+        dispatch(
+          addToCartLocalStorage({
+            ...product,
+            ...data,
+            ...product.productColors[indexColor],
+            ...product.productColors[indexColor].sizes[indexSize],
+          })
+        );
+      } else {
+        dispatch(showMessage("Số lượng tồn không đủ!"));
+      }
+    }
   };
 
   if (!product) return "";
@@ -145,41 +221,32 @@ const ProductDetail = () => {
                   {product.productColors[indexColor].sizes.length > 0 ? (
                     <div className="info size">
                       <div className="text-size">
-                        Kích thước:{" "}
+                        Kích thước: {""}
                         {
                           product.productColors[indexColor].sizes[indexSize]
                             .size
                         }
                       </div>
                       <div className="size-item">
-                        {(() => {
-                          try {
-                            product.productColors[indexColor].sizes.sort(
-                              (a, b) =>
-                                convertSizeStringToNumber(a.size) -
-                                convertSizeStringToNumber(b.size)
+                        {product.productColors[indexColor].sizes.map(
+                          (item, index) => {
+                            return (
+                              <div
+                                className={`item ${
+                                  item.amount === 0
+                                    ? "out-of-stock"
+                                    : index === indexSize
+                                    ? "active"
+                                    : ""
+                                }`}
+                                key={item.id}
+                                onClick={() => setIndexSize(index)}
+                              >
+                                {item.size}
+                              </div>
                             );
-                            return product.productColors[indexColor].sizes;
-                          } catch (error) {
-                            return [];
                           }
-                        })().map((item, index) => {
-                          return (
-                            <div
-                              className={`item ${
-                                item.amount === 0
-                                  ? "out-of-stock"
-                                  : index === indexSize
-                                  ? "active"
-                                  : ""
-                              }`}
-                              key={item.id}
-                              onClick={() => setIndexSize(index)}
-                            >
-                              {item.size}
-                            </div>
-                          );
-                        })}
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -216,6 +283,7 @@ const ProductDetail = () => {
                       <i className="fa-solid fa-plus"></i>
                     </button>
                   </div>
+                  <p className="message-amount">{message}</p>
                 </div>
                 <div className="add-to-cart">
                   <button

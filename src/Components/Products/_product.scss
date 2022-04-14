@@ -2,14 +2,15 @@
 @import "../../styles/responsive";
 
 .product,
-.product-page {
+.product-page,
+.product-category {
   .container {
     @include mobile {
       padding-left: 15px !important;
     }
     .product-item {
-      max-width: 20% !important;
-      padding: 0 10px !important;
+      max-width: 20% important;
+      padding: 0 10px;
       margin-bottom: 10px;
 
       @include mobile {

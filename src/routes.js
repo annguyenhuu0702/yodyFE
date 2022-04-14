@@ -33,6 +33,7 @@ const PageRoutes = () => {
       <Route path="/account/register" element={<Register />} />
       <Route path="/:productDetail" element={<ProductDetail />} />
       <Route path="/cart" element={<CartDetail />} />
+      <Route path="/collections/all" element={<ProductCategory />} />
       {buyertypes.map((item) => {
         return (
           <Route

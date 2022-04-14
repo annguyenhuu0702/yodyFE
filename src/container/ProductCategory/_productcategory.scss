@@ -1,13 +1,26 @@
 @import "../../styles//variable";
 @import "../../styles//base";
+@import "../../styles/responsive";
 
 .product-category {
   margin: 40px 0;
 
+  @include mobile {
+    margin: 10px 0;
+  }
+
   .col-lg-3 {
     padding-left: 0;
+
+    @include mobile {
+      padding-left: 15px;
+    }
     .filter {
       padding-top: 40px;
+
+      @include mobile {
+        padding-top: 0;
+      }
 
       .filtered {
         margin-bottom: 20px;
@@ -62,6 +75,10 @@
         max-height: 300px;
         overflow-y: auto;
 
+        @include mobile {
+          margin-bottom: 0;
+        }
+
         .filter-item {
           border-radius: 3px;
           display: flex;
@@ -71,6 +88,10 @@
           background: #f2f2f2;
           cursor: pointer;
           border: 1px solid transparent;
+
+          @include mobile {
+            padding: 5px;
+          }
 
           span {
             display: flex;
@@ -94,6 +115,10 @@
         font-size: 1.6rem;
         color: $yellow;
         cursor: pointer;
+
+        @include mobile {
+          padding: 0;
+        }
       }
 
       .color,
@@ -107,15 +132,21 @@
 
     .filter-price {
       .price {
-        .filter-item {
-          border: none;
-          margin: 6px 0 6px 0;
-          padding: 0;
-          background: transparent;
+        .list-price {
+          .filter-item {
+            border: none;
+            margin: 6px 0 6px 0;
+            padding: 0;
+            background: transparent;
 
-          span {
-            font-size: 1.6rem;
-            margin-left: 6px;
+            span {
+              font-size: 1.6rem;
+              margin-left: 6px;
+            }
+          }
+
+          @include mobile {
+            display: block;
           }
         }
       }
@@ -154,6 +185,10 @@
         margin-left: -5px;
         color: $black;
         font-size: 1.6rem;
+
+        @include mobile {
+          display: none;
+        }
       }
 
       .sort {
@@ -230,7 +265,7 @@
   .container {
     .col-lg-9 {
       .col-lg-3 {
-        max-width: 25% !important;
+        max-width: 50% !important;
       }
     }
   }

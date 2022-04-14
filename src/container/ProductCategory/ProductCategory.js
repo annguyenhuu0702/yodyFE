@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { apiGetAllProductByCategorySlug } from "../../api/apiProduct";
+import {
+  apiGetAllProduct,
+  apiGetAllProductByCategorySlug,
+} from "../../api/apiProduct";
 import ChangePageTitle from "../../Components/ChangePageTitle/ChangePageTitle";
 import Products from "../../Components/Products/Products";
 import { sortProduct } from "../../Redux/productSlide";
@@ -116,11 +119,23 @@ const ProductCategory = ({ groupCategory, category }) => {
   const products = useSelector((state) => state.product?.products);
 
   // áo quần phụ kiện---------áo thun nam, áo polo nam....
-  const slug = groupCategory ? groupCategory.slug : category.slug;
+  const slug = groupCategory
+    ? groupCategory.slug
+    : category
+    ? category.slug
+    : null;
 
   // sản phẩm theo category slug, group category slug
   useEffect(() => {
-    apiGetAllProductByCategorySlug(dispatch, slug);
+    const api = async () => {
+      if (slug) {
+        apiGetAllProductByCategorySlug(dispatch, slug);
+      } else {
+        await apiGetAllProduct(dispatch);
+        dispatch(sortProduct());
+      }
+    };
+    api();
   }, [dispatch, slug]);
 
   // sort product
@@ -199,7 +214,9 @@ const ProductCategory = ({ groupCategory, category }) => {
         pageTitle={
           groupCategory
             ? groupCategory.name.toUpperCase()
-            : category.name.toUpperCase()
+            : category
+            ? category.name.toUpperCase()
+            : "Tất cả sản phẩm"
         }
       />
       <div className="product-category">
@@ -422,7 +439,7 @@ const ProductCategory = ({ groupCategory, category }) => {
                 </div>
               </div>
             </div>
-            <div className="col-lg-9 right">
+            <div className="col-lg-9 col-12 right">
               <div className="section-sort">
                 <span className="count">
                   {products.length > 0
